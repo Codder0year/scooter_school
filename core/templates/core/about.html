@@ -1,0 +1,45 @@
+{% extends 'core/base.html' %}
+
+{% block title %}О школе - Школа самокатов{% endblock %}
+
+{% block content %}
+<section class="about-us">
+    <div class="container my-5">
+        <h1 class="mb-4">О нашей школе самокатов</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Наша миссия</h2>
+                <p>Мы стремимся популяризировать катание на самокатах как здоровый и увлекательный вид активности для всех возрастов. Наша цель — обучить каждого желающего основам и продвинутым техникам катания, обеспечивая безопасность и удовольствие.</p>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'core/images/mission.jpg' %}" alt="Наша миссия" class="img-fluid rounded">
+            </div>
+        </div>
+        <hr class="my-5">
+        <div class="row">
+            <div class="col-md-6 order-md-2">
+                <h2>Наша история</h2>
+                <p>Основанная в 2015 году группой энтузиастов, наша школа прошла путь от небольших локальных занятий до крупного центра обучения с сотнями выпускников. Мы гордимся нашими достижениями и вкладом в развитие самокатного спорта в регионе.</p>
+            </div>
+            <div class="col-md-6 order-md-1">
+                <img src="{% static 'core/images/history.jpg' %}" alt="Наша история" class="img-fluid rounded">
+            </div>
+        </div>
+        <hr class="my-5">
+        <div class="row">
+            <div class="col-md-6">
+                <h2>Почему выбирают нас</h2>
+                <ul>
+                    <li>Опытные и сертифицированные инструкторы.</li>
+                    <li>Индивидуальный подход к каждому ученику.</li>
+                    <li>Современное оборудование и безопасные площадки для занятий.</li>
+                    <li>Гибкие расписания и разнообразные программы обучения.</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <img src="{% static 'core/images/why_us.jpg' %}" alt="Почему выбирают нас" class="img-fluid rounded">
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

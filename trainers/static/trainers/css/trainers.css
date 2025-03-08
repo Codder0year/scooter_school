@@ -1,0 +1,47 @@
+/* Стили карточек тренеров */
+.card {
+    background-color: #505050 !important; /* Темно-серый фон карточки */
+    color: #fff !important;               /* Белый текст */
+    border: none !important;
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(255, 255, 255, 0.2);
+}
+
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.card-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #fff;  /* Заголовок всегда белый */
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #ddd;  /* Чуть светлее для описания */
+}
+
+ul {
+    padding-left: 20px;
+}
+
+li {
+    font-size: 0.9rem;
+    color: #ccc; /* Легкий оттенок для списка курсов */
+}
+
+/* Адаптивность */
+@media (min-width: 768px) {
+    .col-md-4 {
+        max-width: 350px;
+    }
+}
+

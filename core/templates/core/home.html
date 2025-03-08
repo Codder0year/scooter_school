@@ -1,0 +1,72 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block content %}
+    <!-- Hero-секция: полноэкранный блок с фоновым изображением и затемнением -->
+    <section class="hero" style="position: relative; height: 100vh; background: url('{% static "images/hero-dark.jpg" %}') no-repeat center center; background-size: cover;">
+        <!-- Затемняющий оверлей -->
+        <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5);"></div>
+
+        <!-- Элемент с изображением (водяной знак) позади основного текста -->
+        <div class="hero-background" style="position: absolute; top:50%; left:50%; transform: translate(-50%, -50%); z-index:1; opacity:0.2;">
+            <img src="{% static 'core/images/logo.png' %}" alt="Логотип" style="height:480px; margin-right:10px;">
+        </div>
+
+        <!-- Основной текст с высоким z-index -->
+        <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center" style="position: relative; z-index:2;">
+            <h1 class="display-4">Добро пожаловать в Школу самокатов</h1>
+            <p class="lead">Освойте искусство катания с нами</p>
+            <a class="btn btn-lg btn-outline-light mt-3" href="#">Записаться</a>
+        </div>
+    </section>
+
+    <!-- Блок преимуществ -->
+    <section class="py-5 bg-dark">
+        <div class="container">
+            <div class="row text-center">
+                <div class="col-md-3">
+                    <h3>Профессионалы</h3>
+                    <p>Опытные инструктора, готовые помочь.</p>
+                </div>
+                <div class="col-md-3">
+                    <h3>Безопасность</h3>
+                    <p>Современное оборудование и строгий контроль.</p>
+                </div>
+                <div class="col-md-3">
+                    <h3>Индивидуально</h3>
+                    <p>Малые группы для каждого ученика.</p>
+                </div>
+                <div class="col-md-3">
+                    <h3>Гибко</h3>
+                    <p>Удобное расписание занятий.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Превью курсов -->
+    <section class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5">Наши курсы</h2>
+            <div class="row">
+                {% for course in courses %}
+                    <!-- Карточка курса -->
+                    <div class="col-md-4 mb-4">
+                        <div class="card bg-dark text-white border-0">
+                            {% if course.card_image %}
+                                <img src="{{ course.card_image.url }}" class="card-img" alt="{{ course.title }}">
+                            {% else %}
+                                <img src="{% static 'images/default-course.jpg' %}" class="card-img" alt="Курс">
+                            {% endif %}
+                            <div class="card-img-overlay d-flex flex-column justify-content-end" style="background: rgba(0,0,0,0.3);">
+                                <h5 class="card-title">{{ course.title }}</h5>
+                                <p class="card-text">{{ course.description|truncatewords:15 }}</p>
+                                <a href="{% url 'courses:course_detail' pk=course.pk %}" class="btn btn-outline-light">Подробнее</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

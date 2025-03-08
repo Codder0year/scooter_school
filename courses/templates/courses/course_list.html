@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+<!-- Подключение стилей -->
+<link rel="stylesheet" href="{% static 'courses/css/card_style_courses.css' %}" type="text/css">
+
+{% block content %}
+<div class="course-container">
+    {% for course in courses %}
+        <div class="course-card">
+            <a href="{% url 'courses:course_detail' pk=course.pk %}" class="course-link-wrapper">
+                <div class="course-card-inner">
+                    <!-- Передняя сторона карточки -->
+                    <div class="course-card-front">
+                        {% if course.card_image %}
+                            <img src="{{ course.card_image.url }}" alt="{{ course.title }}" class="course-image">
+                        {% endif %}
+                        <h2 class="course-title">{{ course.title }}</h2>
+                    </div>
+                    <!-- Задняя сторона карточки -->
+                    <div class="course-card-back">
+                        <p class="course-description">{{ course.description }}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

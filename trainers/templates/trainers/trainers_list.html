@@ -1,0 +1,30 @@
+{% extends 'core/base.html' %}
+{% load static %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'trainers/css/trainers.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>Наши тренеры</h1>
+    <div class="row">
+        {% for trainer in trainers %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    <img src="{{ trainer.photo.url }}" class="card-img-top" alt="{{ trainer.name }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ trainer.name }}</h5>
+                        <p class="card-text">{{ trainer.bio }}</p>
+                        <h6>Курсы:</h6>
+                        <ul>
+                            {% for course in trainer.courses.all %}
+                                <li>{{ course.title }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <a class="nav-link btn btn-outline-light ml-3">Записаться</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

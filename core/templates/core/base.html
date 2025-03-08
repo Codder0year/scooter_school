@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Школа самокатов Мотивация{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Подключаем Bootstrap -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Подключаем Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
+    <!-- Собственные стили -->
+    <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
+<link rel="stylesheet" href="{% static 'courses/css/card_style_courses.css' %}">
+    {% block extra_css %}
+
+    {% endblock %}
+</head>
+<body>
+    <!-- Шапка сайта -->
+    <header>
+        <nav class="navbar navbar-expand-lg fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="{% url 'home' %}">Школа самокатов Мотивация</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon" style="color:#fff;"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarContent">
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Главная</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">О школе</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'courses:course_list' %}">Курсы</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'trainers:trainers_list' %}">Наши предподаватели</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Контакты</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-outline-light ml-3">Записаться</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Основной контент -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Подвал сайта -->
+    <footer class="text-center">
+        <div class="container">
+            <p>&copy; {{ current_year|default:"2025" }} Школа самокатов Мотивация. Все права защищены.</p>
+            <p>Контакты: info@scooterschool.ru | +7 (123) 456-78-90</p>
+        </div>
+    </footer>
+
+    <!-- Подключение jQuery и Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
