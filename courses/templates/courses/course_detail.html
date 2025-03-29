@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block content %}
-<div class="course-detail" style="max-width:800px; margin:0 auto; padding:20px;">
+<div class="course-detail" style="max-width:800px; margin:0 auto; padding:20px; ">
     {# Изображение: сначала detail_image, если нет – card_image #}
     {% if course.detail_image %}
         <img src="{{ course.detail_image.url }}" alt="{{ course.title }}" style="width:100%; height:auto; display:block; margin:0 auto;">

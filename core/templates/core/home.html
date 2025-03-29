@@ -2,10 +2,17 @@
 {% load static %}
 
 {% block content %}
+    <!-- Лента с движущимся текстом "МОТИВАЦИЯ" -->
+    <section class="scroll-text-container" style="background-color: #000; padding: 10px 0; overflow: hidden;">
+        <div class="scroll-text">
+            <h2>МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ</h2>
+        </div>
+    </section>
+
     <!-- Hero-секция: полноэкранный блок с фоновым изображением и затемнением -->
     <section class="hero" style="position: relative; height: 100vh; background: url('{% static "images/hero-dark.jpg" %}') no-repeat center center; background-size: cover;">
         <!-- Затемняющий оверлей -->
-        <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.5);"></div>
+        <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0, 0, 0, 0.8);"></div>
 
         <!-- Элемент с изображением (водяной знак) позади основного текста -->
         <div class="hero-background" style="position: absolute; top:50%; left:50%; transform: translate(-50%, -50%); z-index:1; opacity:0.2;">
@@ -18,9 +25,75 @@
             <p class="lead">Освойте искусство катания с нами</p>
             <a class="btn btn-lg btn-outline-light mt-3" href="#">Записаться</a>
         </div>
+
     </section>
 
-    <!-- Блок преимуществ -->
+        <!-- Блок Telegram на черном фоне -->
+    <section style="background: rgba(0, 0, 0, 0.8); padding: 60px 20px;">
+        <div class="container">
+            <div class="telegram-announcement" style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <div style="display: flex; align-items: center; justify-content: center; gap: 30px;">
+                    <!-- Левая колонка: слоган и кнопка -->
+                    <div style="flex: 1; text-align: left; color: white;">
+                        <p style="font-size: 1.1em; margin: 0;">Следите за</p>
+                        <p style="font-size: 1.1em; margin: 0;">всеми новостями</p>
+                        <p style="font-size: 1.1em; margin: 0;">парка и изменениями</p>
+                        <p style="font-size: 1.1em; margin: 0;">в графике работы</p>
+                        <div style="margin-top: 20px;">
+                            <a href="https://t.me/ScootSchoolMOTIVATION" target="_blank" class="btn btn-lg"
+                               style="background-color: #000; color: #fff; border: 1px solid #fff;">
+                                Перейти в Telegram
+                            </a>
+                        </div>
+                    </div>
+                    <!-- Правая колонка: QR-код -->
+                    <div style="flex: 0 0 auto; text-align: center;">
+                        <div style="background-color: #fff; display: inline-block; padding: 5px; border-radius: 5px;">
+                            <img src="{% static 'core/images/qr-code.png' %}" alt="QR-код Telegram" style="width:150px; height:auto;">
+                        </div>
+                        <p style="font-size: 0.9em; margin-top: 10px; color: white;">Отсканируйте QR-код</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок "О нас" -->
+    <section class="energy-section" style="background: rgba(0, 0, 0, 0.8); color: #fff; padding: 50px 0;">
+        <div class="container">
+            <div class="row align-items-center">
+                <!-- Текстовый блок -->
+                <div class="col-md-6">
+                    <h1 style="font-size: 2.5em; font-weight: bold; line-height: 1.2;">
+                        Отдыхай <br> и заряжайся энергией! <br> в уютной атмосфере <br> школы «МОТИВАЦИЯ»
+                    </h1>
+                    <ul style="list-style: none; padding-left: 0; font-size: 1.2em; margin-top: 20px;">
+                        <li>Легендарный вайб – музыка, которая задает настроение.</li>
+                        <li>Не парься с парковкой – приезжай на авто, место для тебя уже есть.</li>
+                        <li>Отличное место для встречи с друзьями – приходи, общайся и наслаждайся атмосферой.</li>
+                        <li>Яркие эмоции каждый день – у нас всегда весело и круто!</li>
+                    </ul>
+                </div>
+                <!-- Блок с фото -->
+                <div class="col-md-6">
+                    <div style="display: flex; flex-direction: column; align-items: center;">
+                        <img src="{% static 'core/images/rampa.png' %}" alt="Большая фотография"
+                             style="width: 100%; max-width: 400px; border-radius: 10px; margin-bottom: 10px;">
+                        <div style="display: flex; gap: 10px;">
+                            <img src="{% static 'core/images/rampa4.png' %}" alt="Фото 1"
+                                 style="width: 30%; border-radius: 10px;">
+                            <img src="{% static 'core/images/rampa2.png' %}" alt="Фото 2"
+                                 style="width: 30%; border-radius: 10px;">
+                            <img src="{% static 'core/images/rampa3.png' %}" alt="Фото 3"
+                                 style="width: 30%; border-radius: 10px;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Блок преимуществ (остался как был) -->
     <section class="py-5 bg-dark">
         <div class="container">
             <div class="row text-center">
