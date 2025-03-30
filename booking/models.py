@@ -2,7 +2,7 @@ from django.db import models
 
 CHOICES_DIRECTION = (
     ('trainer', 'Выбрать тренера'),
-    ('service', 'Выбрать услугу'),
+    ('course ', 'Выбрать услугу'),
 )
 
 
@@ -21,7 +21,7 @@ class Booking(models.Model):
     )
 
     # Если выбрана услуга, ссылаемся на модель из приложения courses
-    service = models.ForeignKey(
+    course = models.ForeignKey(
         'courses.Course',
         on_delete=models.SET_NULL,
         blank=True,

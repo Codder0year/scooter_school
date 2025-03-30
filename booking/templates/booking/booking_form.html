@@ -4,11 +4,24 @@
 {% block extra_css %}
 <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
 <link rel="stylesheet" href="{% static 'booking/css/style_metro.css' %}">
+<style>
+    .hidden { display: none; }
+</style>
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2>Заполните небольшую анкету — и наш менеджер свяжется с вами в течение 5 минут</h2>
+    <h2>Заполните форму для записи</h2>
+
+    <!-- Если есть сообщения об успешной отправке -->
+    {% if messages %}
+        <div class="alert alert-success">
+            {% for message in messages %}
+                <p>{{ message }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     <form method="post" novalidate>
         {% csrf_token %}
 
@@ -16,7 +29,7 @@
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="{{ form.date.id_for_label }}">Какую дату для тренировки рассматриваете?</label>
+                    <label for="{{ form.date.id_for_label }}">Дата</label>
                     {{ form.date }}
                     {% for error in form.date.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -25,7 +38,7 @@
             </div>
             <div class="col-md-6">
                 <div class="form-group">
-                    <label for="{{ form.time.id_for_label }}">Время тренировки</label>
+                    <label for="{{ form.time.id_for_label }}">Время</label>
                     {{ form.time }}
                     {% for error in form.time.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -34,22 +47,21 @@
             </div>
         </div>
 
-        <!-- Направление -->
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <label>Выберите направление</label>
-                {{ form.direction }}
-                {% for error in form.direction.errors %}
-                    <div class="text-danger">{{ error }}</div>
-                {% endfor %}
+        <!-- Кнопки выбора -->
+        <div class="row mt-3" id="choice-buttons">
+            <div class="col-md-6 mb-2">
+                <button type="button" class="btn btn-primary w-100" id="choose-trainer-btn">Выбрать тренера</button>
+            </div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-primary w-100" id="choose-course-btn">Выбрать курс</button>
             </div>
         </div>
 
-        <!-- Тренер -->
-        <div class="row mt-3" id="trainer-field" style="display: none;">
+        <!-- Поля выбора тренера и курса -->
+        <div class="row mt-3 hidden" id="trainer-block">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="{{ form.trainer.id_for_label }}">Выберите тренера</label>
+                    <label>Тренер</label>
                     {{ form.trainer }}
                     {% for error in form.trainer.errors %}
                         <div class="text-danger">{{ error }}</div>
@@ -58,99 +70,137 @@
             </div>
         </div>
 
-        <!-- Услуга -->
-        <div class="row mt-3" id="service-field" style="display: none;">
+        <div class="row mt-3 hidden" id="course-block">
             <div class="col-md-12">
                 <div class="form-group">
-                    <label for="{{ form.service.id_for_label }}">Выберите услугу</label>
-                    {{ form.service }}
-                    {% for error in form.service.errors %}
+                    <label>Курс</label>
+                    {{ form.course }}
+                    {% for error in form.course.errors %}
                         <div class="text-danger">{{ error }}</div>
                     {% endfor %}
                 </div>
             </div>
         </div>
 
-        <!-- Метро -->
-        <div class="row mt-3">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label for="{{ form.metro.id_for_label }}">Станция метро</label>
-                    {{ form.metro }}
-                    {% for error in form.metro.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+        <!-- Остальные поля -->
+        <div class="hidden" id="additional-fields">
+            <div class="row mt-3">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label>Метро</label>
+                        {{ form.metro }}
+                        {% for error in form.metro.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Контакты -->
-        <div class="row mt-3">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.name.id_for_label }}">Ваше имя</label>
-                    {{ form.name }}
-                    {% for error in form.name.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+            <div class="row mt-3">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Имя</label>
+                        {{ form.name }}
+                        {% for error in form.name.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label>Телефон</label>
+                        {{ form.phone }}
+                        {% for error in form.phone.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.phone.id_for_label }}">Ваш телефон</label>
-                    {{ form.phone }}
-                    {% for error in form.phone.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
 
-        <!-- Кнопка -->
-        <div class="row mt-4">
-            <div class="col-md-12">
-                <button type="submit" class="btn btn-primary">Отправить заявку</button>
+            <div class="row mt-4">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-success w-100">Отправить</button>
+                </div>
             </div>
         </div>
     </form>
 </div>
 {% endblock %}
 
+
 {% block extra_js %}
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script>
 $(document).ready(function() {
-    // Проверка загрузки jQuery UI
-    if (!$.ui || !$.ui.autocomplete) {
-        console.error('jQuery UI не загружен!');
-        return;
-    }
+    let selectedPath = null;  // Переменная для отслеживания выбранного пути (тренер или курс)
 
-    // Загрузка станций метро
-    fetch("{% static 'metro_stations.json' %}")
-        .then(response => {
-            if (!response.ok) throw new Error('Ошибка загрузки: ' + response.status);
-            return response.json();
-        })
-        .then(data => {
-            console.log('Успешно загружено станций:', data.length);
-            $("#id_metro").autocomplete({
-                source: data,
-                minLength: 2,
-                delay: 300
+    // Ссылки на скрытые блоки для тренера, курса и дополнительных полей
+    const $additionalFields = $('#additional-fields');
+    const $trainerBlock = $('#trainer-block');
+    const $courseBlock = $('#course-block');
+
+    // Обработчик для кнопки "Выбрать тренера"
+    $('#choose-trainer-btn').click(function() {
+        selectedPath = 'trainer';  // Устанавливаем выбранный путь как тренер
+        $('#choice-buttons').hide();  // Скрываем кнопки выбора
+        $trainerBlock.removeClass('hidden').hide().fadeIn(500);  // Показываем блок тренера с анимацией
+        $courseBlock.addClass('hidden');  // Скрываем блок курса
+    });
+
+    // Обработчик для кнопки "Выбрать курс"
+    $('#choose-course-btn').click(function() {
+        selectedPath = 'course';  // Устанавливаем выбранный путь как курс
+        $('#choice-buttons').hide();  // Скрываем кнопки выбора
+        $courseBlock.removeClass('hidden').hide().fadeIn(500);  // Показываем блок курса с анимацией
+        $trainerBlock.addClass('hidden');  // Скрываем блок тренера
+    });
+
+    // Динамическая загрузка курсов для выбранного тренера
+    $('#id_trainer').change(function() {
+        if (selectedPath === 'trainer' && $(this).val()) {
+            // Загружаем курсы для выбранного тренера
+            $.get(`/booking/get-trainer-courses/${$(this).val()}/`, data => {
+                // Очищаем список курсов и добавляем новый
+                $('#id_course').empty().append('<option value="">---------</option>');
+                data.forEach(c => $('#id_course').append(`<option value="${c.id}">${c.name}</option>`));
+                // Показываем блок с курсами, если они есть
+                $courseBlock.removeClass('hidden').hide().fadeIn(500);
             });
-        })
-        .catch(error => console.error('Ошибка:', error));
+        }
+    });
 
-    // Управление видимостью полей
-    const updateFieldsVisibility = () => {
-        const selected = $("input[name='direction']:checked").val();
-        $("#trainer-field").toggle(selected === 'trainer');
-        $("#service-field").toggle(selected === 'service');
-    };
+    // Динамическая загрузка тренеров для выбранного курса
+    $('#id_course').change(function() {
+        if (selectedPath === 'course' && $(this).val()) {
+            // Загружаем тренеров для выбранного курса
+            $.get(`/booking/get-course-trainers/${$(this).val()}/`, data => {
+                // Очищаем список тренеров и добавляем новый
+                $('#id_trainer').empty().append('<option value="">---------</option>');
+                data.forEach(t => $('#id_trainer').append(`<option value="${t.id}">${t.name}</option>`));
+                // Показываем блок с тренерами, если они есть
+                $trainerBlock.removeClass('hidden').hide().fadeIn(500);
+            });
+        }
+    });
 
-    $("input[name='direction']").on('change', updateFieldsVisibility);
-    updateFieldsVisibility();
+    // Показываем дополнительные поля, когда оба выбора (тренер и курс) сделаны
+    $('body').on('change', '#id_course, #id_trainer', function() {
+        if (
+            (selectedPath === 'trainer' && $('#id_course').val()) ||  // Если выбран тренер и курс
+            (selectedPath === 'course' && $('#id_trainer').val())     // Если выбран курс и тренер
+        ) {
+            // Показываем дополнительные поля
+            $additionalFields.removeClass('hidden').hide().fadeIn(500);
+        }
+    });
+
+    // Автозаполнение для поля "Метро"
+    $('#id_metro').autocomplete({
+        source: "{% static 'metro_stations.json' %}",  // Источник данных для автозаполнения
+        minLength: 2,  // Минимальная длина ввода
+        delay: 300     // Задержка перед отправкой запроса
+    });
 });
+
 </script>
 {% endblock %}
