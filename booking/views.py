@@ -31,8 +31,8 @@ class BookingCreateView(View):
         return render(request, self.template_name, {'form': form})
 
     def send_telegram_notification(self, booking):
-        token = settings.TELEGRAM_BOT_TOKEN  # Добавьте в settings.py
-        chat_id = settings.TELEGRAM_CHAT_ID  # Добавьте в settings.py
+        token = settings.TELEGRAM_BOT_TOKEN
+        chat_id = settings.TELEGRAM_CHAT_ID
         message = (
             f"Новая запись:\n"
             f"Дата: {booking.date}\n"
@@ -44,22 +44,24 @@ class BookingCreateView(View):
             f"Имя: {booking.name}\n"
             f"Телефон: {booking.phone}"
         )
-        url = f"https://api.telegram.org/bot{token}/sendMessage"
+        url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
         payload = {
             'chat_id': chat_id,
             'text': message,
         }
         try:
-            requests.post(url, data=payload)
+            response = requests.post(url, data=payload)
+            response.raise_for_status()  # Для поднятия исключения, если HTTP запрос неудачен
+            if response.status_code != 200:
+                print(f"Ошибка отправки сообщения, код ответа: {response.status_code}")
         except Exception as e:
-            # Логирование ошибки отправки уведомления
             print(f"Ошибка отправки Telegram уведомления: {e}")
 
 
 def get_trainer_courses(request, trainer_id):
     try:
         trainer = Trainer.objects.get(id=trainer_id)
-        courses = trainer.courses.all()  # заменили services на courses
+        courses = trainer.course.all()  # заменили services на courses
         data = [{'id': c.id, 'name': c.title} for c in courses]
         return JsonResponse(data, safe=False)
     except Trainer.DoesNotExist:
@@ -69,8 +71,10 @@ def get_trainer_courses(request, trainer_id):
 def get_course_trainers(request, course_id):
     try:
         course = Course.objects.get(id=course_id)
-        trainers = course.trainers.all()  # заменили trainers на courses
-        data = [{'id': t.id, 'name': t.name} for t in trainers]
+        print(f"Получен курс: {course.title}")  # Добавьте логирование
+        trainers = course.trainers.all()
+        print(f"Тренеры для курса: {[trainer.name for trainer in trainers]}")  # Логирование тренеров
+        data = [{'id': trainer.id, 'name': trainer.name} for trainer in trainers]
         return JsonResponse(data, safe=False)
     except Course.DoesNotExist:
         return JsonResponse([], safe=False)

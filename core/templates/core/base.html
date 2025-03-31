@@ -11,9 +11,59 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap" rel="stylesheet">
     <!-- Собственные стили -->
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
-<link rel="stylesheet" href="{% static 'courses/css/card_style_courses.css' %}">
-    {% block extra_css %}
+    <link rel="stylesheet" href="{% static 'courses/css/card_style_courses.css' %}">
 
+    <style>
+        /* Мобильная версия - скрываем обычное меню, показываем гамбургер */
+        @media (max-width: 768px) {
+            .navbar-nav {
+                display: none;
+            }
+            .navbar-toggler {
+                display: block !important;
+                position: absolute; /* Убираем его от центра */
+                top: 10px; /* Ближе к верху */
+                left: 50%; /* Размещаем по центру */
+                transform: translateX(-50%); /* Сдвигаем на 50% влево для точного центрирования */
+                z-index: 9999;
+            }
+            .navbar-collapse {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                right: 0;
+                background: rgba(0, 0, 0, 0.9);
+                z-index: 999;
+                padding: 20px;
+                display: none;
+                overflow-y: auto;
+                max-height: calc(100vh - 60px); /* Ограничиваем максимальную высоту меню */
+            }
+            .navbar-collapse.show {
+                display: block !important;
+            }
+            .nav-item {
+                margin: 10px 0;
+            }
+            .btn-outline-light {
+                margin-left: 0 !important;
+                margin-top: 15px;
+            }
+        }
+
+        /* Стили для гамбургера */
+        .navbar-toggler {
+            border: 1px solid rgba(255,255,255,0.5);
+            padding: 0.25rem 0.5rem;
+            display: none;
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+    </style>
+
+    {% block extra_css %}
     {% endblock %}
 </head>
 <body>
@@ -24,14 +74,14 @@
                 <a class="navbar-brand" href="{% url 'home' %}">Школа самокатов Мотивация</a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
                         aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon" style="color:#fff;"></span>
+                    <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarContent">
                     <ul class="navbar-nav ml-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Главная</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">О школе</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'courses:course_list' %}">Курсы</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'trainers:trainers_list' %}">Наши предподаватели</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'trainers:trainers_list' %}">Наши преподаватели</a></li>
                         <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Контакты</a></li>
                         <li class="nav-item">
                             <a class="nav-link btn btn-outline-light ml-3" href="{% url 'booking:booking_new' %}">Записаться</a>

@@ -120,3 +120,9 @@ input, textarea, select {
 .scroll-text h2 {
     font-size: 1em; /* Измените на желаемый размер */
 }
+/* Убедимся, что на мобильных устройствах меню отображается корректно */
+@media (max-width: 767px) {
+    .navbar-collapse {
+        display: block;  /* Убираем скрытие меню на мобильных */
+    }
+}

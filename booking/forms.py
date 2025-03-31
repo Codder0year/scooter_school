@@ -23,7 +23,7 @@ class BookingForm(forms.ModelForm):
         course = cleaned_data.get('course')
 
         if trainer and course:
-            if not trainer.courses.filter(id=course.id).exists():  # проверка на курсы
+            if not trainer.course.filter(id=course.id).exists():  # проверка на курсы
                 self.add_error('course', 'Этот тренер не предоставляет выбранный курс')
         elif trainer and not course:
             self.add_error('course', 'Пожалуйста, выберите курс тренера')

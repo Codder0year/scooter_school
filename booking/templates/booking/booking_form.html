@@ -176,12 +176,20 @@ $(document).ready(function() {
             $.get(`/booking/get-course-trainers/${$(this).val()}/`, data => {
                 // Очищаем список тренеров и добавляем новый
                 $('#id_trainer').empty().append('<option value="">---------</option>');
-                data.forEach(t => $('#id_trainer').append(`<option value="${t.id}">${t.name}</option>`));
-                // Показываем блок с тренерами, если они есть
-                $trainerBlock.removeClass('hidden').hide().fadeIn(500);
+                if (data.length > 0) {
+                    data.forEach(t => {
+                        $('#id_trainer').append(`<option value="${t.id}">${t.name}</option>`);
+                    });
+                    // Показываем блок с тренерами, если они есть
+                    $trainerBlock.removeClass('hidden').hide().fadeIn(500);
+                } else {
+                    // Если нет тренеров для курса, скрываем блок с тренерами
+                    $trainerBlock.addClass('hidden');
+                }
             });
         }
     });
+
 
     // Показываем дополнительные поля, когда оба выбора (тренер и курс) сделаны
     $('body').on('change', '#id_course, #id_trainer', function() {
