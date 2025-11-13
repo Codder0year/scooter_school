@@ -1,279 +1,226 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>О школе - Школа Самокатов</title>
-  <style>
-    /* Сброс стилей */
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+{% extends 'core/base.html' %}
+{% load static %}
 
-    body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      line-height: 1.6;
-      overflow-x: hidden;
-    }
+{% block extra_css %}
+<style>
+/* HERO + боковая панель */
+.hero-section {
+  position: relative;
+  height: 85vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
 
-    /* Хедер */
-    header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      background: rgba(17, 17, 17, 0.95);
-      padding: 15px 20px;
-      z-index: 1000;
-      transition: background 0.3s;
-      border-bottom: 1px solid #666;
-    }
+/* Фото за текстом */
+.hero-section img.bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
 
-    header h1 {
-      font-size: 1.8em;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      text-align: center;
-    }
+/* затемнение, чуть светлее чем раньше */
+.hero-section::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+  z-index: 1;
+}
 
-    /* Hero секция */
-    .hero {
-      position: relative;
-      height: 100vh;
-      background: url('https://picsum.photos/1920/1080?random=3') no-repeat center center/cover;
-    }
+/* контент hero */
+.hero-content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  max-width: 1200px;
+  width: 100%;
+  padding: 40px 20px;
+}
 
-  .hero::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-  }
+/* главный текст */
+.hero-text h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.hero-text p {
+  color: #ddd;
+  font-size: 1.1em;
+  margin-bottom: 20px;
+}
+.hero-text .btn {
+  border-radius: 8px;
+  padding: 10px 18px;
+  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.08);
+  color: white;
+  text-decoration: none;
+  transition: 0.2s;
+}
+.hero-text .btn:hover {
+  background: rgba(255,255,255,0.18);
+  transform: translateY(-3px);
+}
 
+/* боковая панель */
+.side-panel {
+  background: rgba(30,30,30,0.7);
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  padding: 16px;
+  color: #f5f5f5;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+  z-index: 2;
+}
+.side-panel h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+.side-panel nav a {
+  display: block;
+  color: #eaeaea;
+  padding: 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: background .15s, transform .15s;
+}
+.side-panel nav a:hover {
+  background: rgba(255,255,255,0.05);
+  transform: translateX(6px);
+}
+
+/* секции */
+.section-block {
+  padding: 60px 0;
+  color: white;
+}
+.section-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+.news-card {
+  background: rgba(255,255,255,0.05);
+  padding: 16px;
+  border-radius: 10px;
+}
+
+/* адаптив */
+@media (max-width: 991px) {
   .hero-content {
-    position: relative;
-    z-index: 1;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 0 20px;
-    animation: fadeInDown 1.5s ease-out;
+    grid-template-columns: 1fr;
   }
-
-  .hero-content h2 {
-    font-size: 3em;
-    margin-bottom: 20px;
-    text-transform: uppercase;
-    letter-spacing: 3px;
+  .side-panel {
+    display: none;
   }
-
-  .hero-content p {
-    font-size: 1.2em;
-    max-width: 800px;
-    margin-bottom: 30px;
-    color: #ccc;
-  }
-
-  .hero-content button {
-    padding: 12px 30px;
-    font-size: 1em;
-    background: transparent;
-    border: 2px solid #666;
-    color: #fff;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    cursor: pointer;
-    transition: background 0.3s, color 0.3s;
-  }
-
-  .hero-content button:hover {
-    background: #666;
-    color: #000;
-  }
-
-  @keyframes fadeInDown {
-    from {
-      opacity: 0;
-      transform: translateY(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 120px 20px 60px;
-  }
-
-  .section {
-    margin-bottom: 80px;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
-  }
-
-  .section.visible {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .section h2 {
-    font-size: 2.5em;
-    margin-bottom: 20px;
-    text-align: center;
-    position: relative;
-    display: inline-block;
-  }
-
-  .section h2::after {
-    content: "";
-    position: absolute;
-    bottom: -5px;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60%;
-    height: 2px;
-    background: #666;
-  }
-
-  .about-content {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .about-content img {
-    flex: 1 1 400px;
-    max-width: 500px;
-    width: 100%;
-    border: 5px solid #666;
-    border-radius: 5px;
-  }
-
-  .about-text {
-    flex: 1 1 400px;
-    font-size: 1.1em;
-    color: #ccc;
-  }
-
-  @media (max-width: 768px) {
-    .hero-content h2 {
-      font-size: 2.5em;
-    }
-
-    .hero-content p {
-      font-size: 1em;
-    }
-
-    .about-content {
-      flex-direction: column;
-    }
-  }
+}
+html {
+  scroll-behavior: smooth;
+}
 </style>
 {% endblock %}
 
 {% block content %}
-<!-- Hero секция -->
-<section class="hero">
-  <div class="hero-content">
-    <h2>О нашей школе</h2>
-    <p>
-      Добро пожаловать в Школу Самокатов – место, где скорость встречается с мастерством!
-      Мы обучаем искусству катания, развиваем уверенность и дарим море ярких эмоций.
-    </p>
-    <button id="exploreBtn">Узнать больше</button>
+<!-- HERO -->
+<section class="hero-section">
+  <img src="{% static 'core/images/school1.jpg' %}" alt="фон" class="bg">
+
+  <div class="hero-content container">
+    <div class="hero-text">
+      <h1>О школе самокатов «МОТИВАЦИЯ»</h1>
+      <p>Место, где катание становится стилем жизни. От первых шагов до уверенных трюков — здесь твой путь начинается.</p>
+      <a href="#contact" class="btn btn-lg">Записаться на пробное</a>
+    </div>
+
+    <aside class="side-panel">
+      <h3>Навигация</h3>
+      <nav>
+        <a href="#mission">Наша миссия</a>
+        <a href="#vibe">Атмосфера</a>
+        <a href="#news">Новости</a>
+        <a href="#contact">Контакты</a>
+      </nav>
+    </aside>
   </div>
 </section>
 
-<!-- Основной контент -->
-<div class="container">
-  <!-- Миссия -->
-  <section class="section" id="mission">
-    <h2>Наша миссия</h2>
-    <div class="about-content">
-      <div class="about-text">
-        <p>
-          Наша миссия – научить каждого чувствовать свободу и уверенность за рулем самоката.
-          Мы верим, что движение – это жизнь, а умение управлять самокатом открывает новые горизонты
-          и дарит незабываемые ощущения.
-        </p>
-        <p>
-          Мы заботимся о безопасности, профессионализме наших инструкторов и индивидуальном подходе к каждому ученику.
-        </p>
+<!-- МИССИЯ -->
+<section id="mission" class="section-block" style="background: rgba(0,0,0,0.9);">
+  <div class="section-inner">
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h2 style="font-weight:bold; font-size:2rem;">Наша миссия</h2>
+        <p style="color:#ddd;">Мы создали школу «МОТИВАЦИЯ», чтобы каждый мог безопасно и уверенно освоить самокат — от первых шагов до уверенных трюков.</p>
+        <ul style="list-style:none; padding-left:0; display:flex; flex-direction:column; gap:12px;">
+          <li>✅ Индивидуальные тренировки</li>
+          <li>✅ Сертифицированные инструкторы</li>
+          <li>✅ Безопасная площадка</li>
+          <li>✅ Атмосфера дружбы</li>
+          <li>✅ Соревнования и челленджи</li>
+        </ul>
       </div>
-      <img src="https://picsum.photos/600/400?random=4" alt="Наша миссия">
-    </div>
-  </section>
-
-  <!-- Инструктора -->
-  <section class="section" id="instructors">
-    <h2>Наши инструктора</h2>
-    <div class="about-content">
-      <img src="https://picsum.photos/600/400?random=5" alt="Наши инструктора">
-      <div class="about-text">
-        <p>
-          Наши профессиональные инструкторы – это эксперты в своем деле, которые знают все секреты уверенного и безопасного катания.
-        </p>
-        <p>
-          Они помогут каждому раскрыть свой потенциал и научат грамотно управлять самокатом, независимо от уровня подготовки.
-        </p>
+      <div class="col-md-6 text-center">
+        <img src="{% static 'core/images/zoom_2_24w.jpg' %}" alt="Фото школы" style="width:100%; max-width:450px; border-radius:14px; box-shadow:0 12px 24px rgba(0,0,0,0.4);">
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <!-- Отзывы -->
-  <section class="section" id="testimonials">
-    <h2>Отзывы учеников</h2>
-    <div class="about-content">
-      <div class="about-text">
-        <p>
-          «Я никогда не думал, что катание на самокате может приносить столько радости! Благодаря Школе Самокатов я обрел уверенность в себе и нашел новых друзей.»
-        </p>
-        <p>
-          «Отличная атмосфера, профессиональные преподаватели и море позитива. Рекомендую всем, кто хочет попробовать что-то новое!»
-        </p>
-      </div>
-      <img src="https://picsum.photos/600/400?random=6" alt="Отзывы учеников">
+<!-- АТМОСФЕРА -->
+<section id="vibe" class="section-block" style="background: rgba(0,0,0,0.85); text-align:center;">
+  <div class="section-inner">
+    <h2>Атмосфера школы</h2>
+    <p style="color:#ccc;">Музыка, энергия, стиль — у нас не просто тренировки, а комьюнити.</p>
+    <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:15px; margin-top:20px;">
+      <img src="{% static 'core/images/DwQu22FtF-Y.jpg' %}" style="width:280px; border-radius:10px;">
+      <img src="{% static 'core/images/c4fav5si0lxab3lut875ui1znd4001ce.png' %}" style="width:280px; border-radius:10px;">
+      <img src="{% static 'core/images/rampa3.png' %}" style="width:280px; border-radius:10px;">
+      <img src="{% static 'core/images/rampa4.png' %}" style="width:280px; border-radius:10px;">
     </div>
-  </section>
-</div>
-{% endblock %}
+  </div>
+</section>
 
-{% block extra_js %}
-<script>
-  document.getElementById('exploreBtn').addEventListener('click', function () {
-    document.getElementById('mission').scrollIntoView({ behavior: 'smooth' });
-  });
+<!-- НОВОСТИ -->
+<section id="news" class="section-block" style="background: rgba(0,0,0,0.95);">
+  <div class="section-inner">
+    <h2>Новости школы</h2>
+    <div class="row g-4">
+      {% for news in news_list %}
+      <div class="col-md-4">
+        <div class="news-card">
+          <h5>{{ news.title }}</h5>
+          <p>{{ news.content|linebreaks }}</p>
+          {% if news.image %}
+          <img src="{{ news.image.url }}" style="width:100%; border-radius:10px; margin-top:10px;">
+          {% endif %}
+          {% if news.video %}
+          <video width="100%" controls style="margin-top:10px;">
+            <source src="{{ news.video.url }}" type="video/mp4">
+          </video>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
 
-  const sections = document.querySelectorAll('.section');
-  const options = { threshold: 0.3 };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        observer.unobserve(entry.target);
-      }
-    });
-  }, options);
-
-  sections.forEach(section => {
-    observer.observe(section);
-  });
-</script>
+<!-- КОНТАКТЫ -->
+<section id="contact" class="section-block" style="background:#000; text-align:center;">
+  <div class="section-inner">
+    <h2>Хочешь к нам?</h2>
+    <p style="color:#ccc;">Запишись на первое занятие или свяжись прямо сейчас.</p>
+    <a href="{% url 'contact' %}" class="btn btn-outline-light btn-lg mt-3">Оставить заявку</a>
+    <p style="margin-top:15px;">Или позвони: <strong>+7 923 243 43 43</strong></p>
+  </div>
+</section>
 {% endblock %}

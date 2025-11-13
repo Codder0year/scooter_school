@@ -10,7 +10,6 @@ urlpatterns = [
     path('about/', AboutView.as_view(), name='about'),
     path('courses/', include('courses.urls')),
     path('contact/', views.contact_view, name='contact'),
-
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -13,6 +13,30 @@
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'courses/css/card_style_courses.css' %}">
     {% block extra_css %}{% endblock %}
+    <style>
+      /* Уменьшаем хедер для более компактного вида */
+      header {
+          padding: 5px 10px;
+          background: rgba(0, 0, 0, 0.9);
+          box-shadow: none;
+      }
+      .navbar {
+          padding: 5px 0;
+      }
+      .navbar-brand {
+          font-size: 1.2rem;
+          padding-top: 5px;
+      }
+      .nav-link {
+          font-size: 0.9rem;
+      }
+      /* Обеспечим корректное отображение бургера на мобильных */
+      @media (max-width: 768px) {
+          .navbar-collapse {
+              background: rgba(0, 0, 0, 0.9);
+          }
+      }
+    </style>
 </head>
 <body>
     <!-- Шапка сайта -->
@@ -42,31 +66,7 @@
 
     <!-- Основной контент -->
     <main>
-        {% block content %}
-        <!-- Лента с движущимся текстом -->
-        <section class="scroll-text-container">
-            <div class="scroll-text">
-                <h2>МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ</h2>
-            </div>
-        </section>
-
-        <!-- Hero-секция -->
-        <section class="hero" style="position: relative;">
-            <!-- Затемняющий оверлей -->
-            <div class="overlay"></div>
-
-            <!-- Основной текст -->
-            <div class="hero-content container h-100 d-flex flex-column justify-content-center align-items-center text-center">
-                <h1 class="display-4">Добро пожаловать в Школу самокатов</h1>
-                <p class="lead">Освойте искусство катания с нами</p>
-                <a class="btn btn-lg btn-outline-light mt-3" href="{% url 'booking:booking_new' %}">Записаться</a>
-            </div>
-        </section>
-
-        <!-- Остальные блоки страницы -->
-        <!-- ... здесь могут быть другие секции, например, Telegram, "О нас", курсы и т.д. -->
-
-        {% endblock %}
+        {% block content %}{% endblock %}
     </main>
 
     <!-- Подвал сайта -->

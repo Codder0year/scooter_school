@@ -1,98 +1,219 @@
 {% extends 'core/base.html' %}
 {% load static %}
 
+{% block extra_css %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+body {
+    font-family: "Inter", sans-serif;
+    color: #eee;
+    background: #000;
+}
+
+/* Бегущая строка — оригинальный стиль */
+.scroll-text-container {
+    background-color: #000;
+    padding: 10px 0;
+    overflow: hidden;
+}
+.scroll-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 20s linear infinite;
+}
+.scroll-text h2 {
+    color: #fff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+}
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* HERO — возвращён старый стиль шрифта и фон */
+.hero {
+    position: relative;
+    height: 100vh;
+    background: url("{% static 'images/hero-dark.jpg' %}") no-repeat center center;
+    background-size: cover;
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+}
+.hero-background {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.2;
+    z-index: 1;
+}
+.hero-background img {
+    height: 480px;
+}
+.hero .container {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: white;
+}
+.hero h1 {
+    font-family: "Roboto", sans-serif; /* старый шрифт */
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: white;
+}
+.hero p.lead {
+    font-size: 1.3rem;
+    color: #ccc;
+}
+.hero a.btn {
+    border: 2px solid white;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+.hero a.btn:hover {
+    background: white;
+    color: black;
+}
+
+/* Telegram блок */
+.telegram-announcement {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+.telegram-announcement .btn {
+    background-color: #000;
+    border: 1px solid #fff;
+    color: #fff;
+}
+.telegram-announcement .btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* О нас */
+.energy-section {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 60px 0;
+}
+.energy-section h1 {
+    font-weight: bold;
+}
+.energy-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+.energy-section li {
+    margin-bottom: 10px;
+}
+
+/* Преимущества и карточки */
+.bg-dark h3 {
+    color: #fff;
+}
+.bg-dark p {
+    color: #ccc;
+}
+.card {
+    border: none;
+    overflow: hidden;
+    transition: 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+.card .card-img {
+    height: 240px;
+    object-fit: cover;
+}
+.card .card-img-overlay {
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+}
+</style>
+{% endblock %}
+
 {% block content %}
-    <!-- Лента с движущимся текстом "МОТИВАЦИЯ" -->
-    <section class="scroll-text-container" style="background-color: #000; padding: 3px 0; overflow: hidden; max-height: 13px;">
-        <div class="scroll-text" style="font-size: 1em; white-space: nowrap;">
-            <h2 style="margin: 0; padding: 0;">МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ</h2>
+    <!-- Бегущая строка -->
+    <section class="scroll-text-container">
+        <div class="scroll-text">
+            <h2>МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ</h2>
         </div>
     </section>
 
-    <!-- Hero-секция: полноэкранный блок с фоновым изображением и затемнением -->
-    <section class="hero" style="position: relative; height: 100vh; background: url('{% static "images/hero-dark.jpg" %}') no-repeat center center; background-size: cover;">
-        <!-- Затемняющий оверлей -->
-        <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: rgba(0, 0, 0, 0.8);"></div>
-
-        <!-- Логотип, который автоматически масштабируется, но теперь выше -->
-        <div class="hero-background" style="position: absolute; top: 40%; left: 50%; transform: translate(-50%, -50%); z-index: 1; opacity: 0.5;">
-            <img id="logo" src="{% static 'core/images/logo.png' %}" alt="Логотип" style="width: 100vw; height: auto; max-height: 90vh;">
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-background">
+            <img src="{% static 'core/images/school1.jpg' %}" alt="Логотип школы">
         </div>
-
-        <!-- Основной текст с высоким z-index -->
-        <div class="container h-100 d-flex flex-column justify-content-center align-items-center text-center" style="position: relative; z-index:2;">
-            <h1 class="display-4">Добро пожаловать в Школу самокатов</h1>
+        <div class="container h-100 d-flex flex-column justify-content-center align-items-center">
+            <h1>Добро пожаловать в Школу самокатов</h1>
             <p class="lead">Освойте искусство катания с нами</p>
-            <a class="btn btn-lg btn-outline-light mt-3" href="{% url 'booking:booking_new' %}">Записаться</a>
+            <a class="btn btn-lg mt-3" href="#">Записаться</a>
         </div>
     </section>
 
-    <!-- Блок Telegram на черном фоне -->
-    <section style="background: rgba(0, 0, 0, 0.8); padding: 60px 20px;">
+    <!-- Telegram блок -->
+    <section style="background: rgba(0,0,0,0.8); padding: 60px 20px;">
         <div class="container">
-            <div class="telegram-announcement" style="text-align: center; max-width: 800px; margin: 0 auto;">
-                <div style="display: flex; align-items: center; justify-content: center; gap: 30px;">
-                    <!-- Левая колонка: слоган и кнопка -->
-                    <div style="flex: 1; text-align: left; color: white;">
-                        <p style="font-size: 1.1em; margin: 0;">Следите за</p>
-                        <p style="font-size: 1.1em; margin: 0;">всеми новостями</p>
-                        <p style="font-size: 1.1em; margin: 0;">парка и изменениями</p>
-                        <p style="font-size: 1.1em; margin: 0;">в графике работы</p>
-                        <div style="margin-top: 20px;">
-                            <a href="https://t.me/ScootSchoolMOTIVATION" target="_blank" class="btn btn-lg"
-                               style="background-color: #000; color: #fff; border: 1px solid #fff;">
-                                Перейти в Telegram
-                            </a>
-                        </div>
+            <div class="telegram-announcement text-center">
+                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-4">
+                    <div class="text-left text-white mb-4 mb-md-0">
+                        <p>Следите за всеми новостями парка и изменениями в графике работы</p>
+                        <a href="https://t.me/ScootSchoolMOTIVATION" target="_blank" class="btn btn-lg">Перейти в Telegram</a>
                     </div>
-                    <!-- Правая колонка: QR-код -->
-                    <div style="flex: 0 0 auto; text-align: center;">
-                        <div style="background-color: #fff; display: inline-block; padding: 5px; border-radius: 5px;">
-                            <img src="{% static 'core/images/qr-code.png' %}" alt="QR-код Telegram" style="width:150px; height:auto;">
+                    <div>
+                        <div style="background-color: #fff; display:inline-block; padding:6px; border-radius:6px;">
+                            <img src="{% static 'core/images/qr-code.png' %}" alt="QR-код Telegram" style="width:150px;">
                         </div>
-                        <p style="font-size: 0.9em; margin-top: 10px; color: white;">Отсканируйте QR-код</p>
+                        <p class="text-white mt-2">Отсканируйте QR-код</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Блок "О нас" -->
-    <section class="energy-section" style="background: rgba(0, 0, 0, 0.8); color: #fff; padding: 50px 0;">
+    <!-- О нас -->
+    <section class="energy-section">
         <div class="container">
             <div class="row align-items-center">
-                <!-- Текстовый блок -->
                 <div class="col-md-6">
-                    <h1 style="font-size: 2.5em; font-weight: bold; line-height: 1.2;">
-                        Отдыхай <br> и заряжайся энергией! <br> в уютной атмосфере <br> школы «МОТИВАЦИЯ»
-                    </h1>
-                    <ul style="list-style: none; padding-left: 0; font-size: 1.2em; margin-top: 20px;">
+                    <h1>Отдыхай <br>и заряжайся энергией!</h1>
+                    <p>в уютной атмосфере школы «МОТИВАЦИЯ»</p>
+                    <ul>
                         <li>Легендарный вайб – музыка, которая задает настроение.</li>
                         <li>Не парься с парковкой – приезжай на авто, место для тебя уже есть.</li>
                         <li>Отличное место для встречи с друзьями – приходи, общайся и наслаждайся атмосферой.</li>
                         <li>Яркие эмоции каждый день – у нас всегда весело и круто!</li>
                     </ul>
                 </div>
-                <!-- Блок с фото -->
-                <div class="col-md-6">
-                    <div style="display: flex; flex-direction: column; align-items: center;">
-                        <img src="{% static 'core/images/rampa.png' %}" alt="Большая фотография"
-                             style="width: 100%; max-width: 400px; border-radius: 10px; margin-bottom: 10px;">
-                        <div style="display: flex; gap: 10px;">
-                            <img src="{% static 'core/images/rampa4.png' %}" alt="Фото 1"
-                                 style="width: 30%; border-radius: 10px;">
-                            <img src="{% static 'core/images/rampa2.png' %}" alt="Фото 2"
-                                 style="width: 30%; border-radius: 10px;">
-                            <img src="{% static 'core/images/rampa3.png' %}" alt="Фото 3"
-                                 style="width: 30%; border-radius: 10px;">
-                        </div>
+                <div class="col-md-6 text-center">
+                    <img src="{% static 'core/images/rampa.png' %}" alt="Рампа" style="width: 100%; max-width: 400px; border-radius: 10px; margin-bottom: 10px;">
+                    <div class="d-flex justify-content-center gap-2">
+                        <img src="{% static 'core/images/rampa4.png' %}" alt="Фото 1" style="width: 30%; border-radius: 10px;">
+                        <img src="{% static 'core/images/rampa2.png' %}" alt="Фото 2" style="width: 30%; border-radius: 10px;">
+                        <img src="{% static 'core/images/rampa3.png' %}" alt="Фото 3" style="width: 30%; border-radius: 10px;">
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Блок преимуществ (остался как был) -->
+    <!-- Преимущества -->
     <section class="py-5 bg-dark">
         <div class="container">
             <div class="row text-center">
@@ -116,24 +237,23 @@
         </div>
     </section>
 
-    <!-- Превью курсов -->
-    <section class="py-5">
+    <!-- Курсы -->
+    <section id="courses" class="py-5">
         <div class="container">
             <h2 class="text-center mb-5">Наши курсы</h2>
             <div class="row">
                 {% for course in courses %}
-                    <!-- Карточка курса -->
                     <div class="col-md-4 mb-4">
-                        <div class="card bg-dark text-white border-0">
+                        <div class="card bg-dark text-white">
                             {% if course.card_image %}
                                 <img src="{{ course.card_image.url }}" class="card-img" alt="{{ course.title }}">
                             {% else %}
                                 <img src="{% static 'images/default-course.jpg' %}" class="card-img" alt="Курс">
                             {% endif %}
-                            <div class="card-img-overlay d-flex flex-column justify-content-end" style="background: rgba(0,0,0,0.3);">
+                            <div class="card-img-overlay">
                                 <h5 class="card-title">{{ course.title }}</h5>
                                 <p class="card-text">{{ course.description|truncatewords:15 }}</p>
-                                <a href="{% url 'courses:course_detail' pk=course.pk %}" class="btn btn-outline-light">Подробнее</a>
+                                <a href="{% url 'courses:course_detail' pk=course.pk %}" class="btn btn-outline-light btn-sm">Подробнее</a>
                             </div>
                         </div>
                     </div>
