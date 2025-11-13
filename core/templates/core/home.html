@@ -9,9 +9,10 @@ body {
     font-family: "Inter", sans-serif;
     color: #eee;
     background: #000;
+    margin: 0;
 }
 
-/* Бегущая строка — оригинальный стиль */
+/* Бегущая строка */
 .scroll-text-container {
     background-color: #000;
     padding: 10px 0;
@@ -34,7 +35,7 @@ body {
     100% { transform: translateX(-50%); }
 }
 
-/* HERO — возвращён старый стиль шрифта и фон */
+/* HERO */
 .hero {
     position: relative;
     height: 100vh;
@@ -45,26 +46,27 @@ body {
     content: "";
     position: absolute;
     top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
 }
 .hero-background {
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     opacity: 0.2;
-    z-index: 1;
+    z-index: 2;
 }
 .hero-background img {
     height: 480px;
 }
 .hero .container {
     position: relative;
-    z-index: 2;
+    z-index: 3;
     text-align: center;
     color: white;
 }
 .hero h1 {
-    font-family: "Roboto", sans-serif; /* старый шрифт */
+    font-family: "Roboto", sans-serif;
     font-size: 3.5rem;
     font-weight: 700;
     color: white;
@@ -85,7 +87,7 @@ body {
     color: black;
 }
 
-/* Telegram блок */
+/* Telegram */
 .telegram-announcement {
     background: rgba(255, 255, 255, 0.05);
     border-radius: 10px;
@@ -96,6 +98,7 @@ body {
     background-color: #000;
     border: 1px solid #fff;
     color: #fff;
+    transition: 0.3s;
 }
 .telegram-announcement .btn:hover {
     background-color: #fff;
@@ -110,6 +113,7 @@ body {
 }
 .energy-section h1 {
     font-weight: bold;
+    font-size: 2.5rem;
 }
 .energy-section ul {
     list-style: none;
@@ -142,123 +146,136 @@ body {
     background: rgba(0,0,0,0.4);
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: flex-end;
+    padding: 15px;
+    transition: 0.3s;
+}
+.card .card-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+.card .card-text {
+    font-size: 0.9rem;
+}
+/* Молодёжный стиль: плавные тени и hover */
+.card:hover .card-img-overlay {
+    background: rgba(255,255,255,0.1);
 }
 </style>
 {% endblock %}
 
 {% block content %}
-    <!-- Бегущая строка -->
-    <section class="scroll-text-container">
-        <div class="scroll-text">
-            <h2>МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ</h2>
-        </div>
-    </section>
+<!-- Бегущая строка -->
+<section class="scroll-text-container">
+    <div class="scroll-text">
+        <h2>МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ МОТИВАЦИЯ</h2>
+    </div>
+</section>
 
-    <!-- Hero -->
-    <section class="hero">
-        <div class="hero-background">
-            <img src="{% static 'core/images/school1.jpg' %}" alt="Логотип школы">
-        </div>
-        <div class="container h-100 d-flex flex-column justify-content-center align-items-center">
-            <h1>Добро пожаловать в Школу самокатов</h1>
-            <p class="lead">Освойте искусство катания с нами</p>
-            <a class="btn btn-lg mt-3" href="#">Записаться</a>
-        </div>
-    </section>
+<!-- Hero -->
+<section class="hero">
+    <div class="hero-background">
+        <img src="{% static 'core/images/logo.png' %}" alt="Логотип школы">
+    </div>
+    <div class="container h-100 d-flex flex-column justify-content-center align-items-center">
+        <h1>Добро пожаловать в Школу самокатов</h1>
+        <p class="lead">Освойте искусство катания с нами</p>
+        <a class="btn btn-lg mt-3" href="{% url 'booking:booking_new' %}">Записаться</a>
+    </div>
+</section>
 
-    <!-- Telegram блок -->
-    <section style="background: rgba(0,0,0,0.8); padding: 60px 20px;">
-        <div class="container">
-            <div class="telegram-announcement text-center">
-                <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-4">
-                    <div class="text-left text-white mb-4 mb-md-0">
-                        <p>Следите за всеми новостями парка и изменениями в графике работы</p>
-                        <a href="https://t.me/ScootSchoolMOTIVATION" target="_blank" class="btn btn-lg">Перейти в Telegram</a>
+<!-- Telegram -->
+<section style="background: rgba(0,0,0,0.8); padding: 60px 20px;">
+    <div class="container">
+        <div class="telegram-announcement text-center">
+            <div class="d-flex flex-column flex-md-row justify-content-center align-items-center gap-4">
+                <div class="text-left text-white mb-4 mb-md-0">
+                    <p>Следите за всеми новостями парка и изменениями в графике работы</p>
+                    <a href="https://t.me/ScootSchoolMOTIVATION" target="_blank" class="btn btn-lg">Перейти в Telegram</a>
+                </div>
+                <div>
+                    <div style="background-color: #fff; display:inline-block; padding:6px; border-radius:6px;">
+                        <img src="{% static 'core/images/qr-code.png' %}" alt="QR-код Telegram" style="width:150px;">
                     </div>
-                    <div>
-                        <div style="background-color: #fff; display:inline-block; padding:6px; border-radius:6px;">
-                            <img src="{% static 'core/images/qr-code.png' %}" alt="QR-код Telegram" style="width:150px;">
+                    <p class="text-white mt-2">Отсканируйте QR-код</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- О нас -->
+<section class="energy-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h1>Отдыхай <br>и заряжайся энергией!</h1>
+                <p>в уютной атмосфере школы «МОТИВАЦИЯ»</p>
+                <ul>
+                    <li>Легендарный вайб – музыка, которая задает настроение.</li>
+                    <li>Не парься с парковкой – приезжай на авто, место для тебя уже есть.</li>
+                    <li>Отличное место для встречи с друзьями – приходи, общайся и наслаждайся атмосферой.</li>
+                    <li>Яркие эмоции каждый день – у нас всегда весело и круто!</li>
+                </ul>
+            </div>
+            <div class="col-md-6 text-center">
+                <img src="{% static 'core/images/rampa.png' %}" alt="Рампа" style="width: 100%; max-width: 400px; border-radius: 10px; margin-bottom: 10px;">
+                <div class="d-flex justify-content-center gap-2">
+                    <img src="{% static 'core/images/rampa4.png' %}" alt="Фото 1" style="width: 30%; border-radius: 10px;">
+                    <img src="{% static 'core/images/rampa2.png' %}" alt="Фото 2" style="width: 30%; border-radius: 10px;">
+                    <img src="{% static 'core/images/rampa3.png' %}" alt="Фото 3" style="width: 30%; border-radius: 10px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Преимущества -->
+<section class="py-5 bg-dark">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-3">
+                <h3>Профессионалы</h3>
+                <p>Опытные инструктора, готовые помочь.</p>
+            </div>
+            <div class="col-md-3">
+                <h3>Безопасность</h3>
+                <p>Современное оборудование и строгий контроль.</p>
+            </div>
+            <div class="col-md-3">
+                <h3>Индивидуально</h3>
+                <p>Малые группы для каждого ученика.</p>
+            </div>
+            <div class="col-md-3">
+                <h3>Гибко</h3>
+                <p>Удобное расписание занятий.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Курсы -->
+<section id="courses" class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Наши курсы</h2>
+        <div class="row">
+            {% for course in courses %}
+                <div class="col-md-4 mb-4">
+                    <div class="card bg-dark text-white">
+                        {% if course.card_image %}
+                            <img src="{{ course.card_image.url }}" class="card-img" alt="{{ course.title }}">
+                        {% else %}
+                            <img src="{% static 'images/default-course.jpg' %}" class="card-img" alt="Курс">
+                        {% endif %}
+                        <div class="card-img-overlay">
+                            <h5 class="card-title">{{ course.title }}</h5>
+                            <p class="card-text">{{ course.description|truncatewords:15 }}</p>
+                            <a href="{% url 'courses:course_detail' pk=course.pk %}" class="btn btn-outline-light btn-sm">Подробнее</a>
                         </div>
-                        <p class="text-white mt-2">Отсканируйте QR-код</p>
                     </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-    </section>
-
-    <!-- О нас -->
-    <section class="energy-section">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <h1>Отдыхай <br>и заряжайся энергией!</h1>
-                    <p>в уютной атмосфере школы «МОТИВАЦИЯ»</p>
-                    <ul>
-                        <li>Легендарный вайб – музыка, которая задает настроение.</li>
-                        <li>Не парься с парковкой – приезжай на авто, место для тебя уже есть.</li>
-                        <li>Отличное место для встречи с друзьями – приходи, общайся и наслаждайся атмосферой.</li>
-                        <li>Яркие эмоции каждый день – у нас всегда весело и круто!</li>
-                    </ul>
-                </div>
-                <div class="col-md-6 text-center">
-                    <img src="{% static 'core/images/rampa.png' %}" alt="Рампа" style="width: 100%; max-width: 400px; border-radius: 10px; margin-bottom: 10px;">
-                    <div class="d-flex justify-content-center gap-2">
-                        <img src="{% static 'core/images/rampa4.png' %}" alt="Фото 1" style="width: 30%; border-radius: 10px;">
-                        <img src="{% static 'core/images/rampa2.png' %}" alt="Фото 2" style="width: 30%; border-radius: 10px;">
-                        <img src="{% static 'core/images/rampa3.png' %}" alt="Фото 3" style="width: 30%; border-radius: 10px;">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Преимущества -->
-    <section class="py-5 bg-dark">
-        <div class="container">
-            <div class="row text-center">
-                <div class="col-md-3">
-                    <h3>Профессионалы</h3>
-                    <p>Опытные инструктора, готовые помочь.</p>
-                </div>
-                <div class="col-md-3">
-                    <h3>Безопасность</h3>
-                    <p>Современное оборудование и строгий контроль.</p>
-                </div>
-                <div class="col-md-3">
-                    <h3>Индивидуально</h3>
-                    <p>Малые группы для каждого ученика.</p>
-                </div>
-                <div class="col-md-3">
-                    <h3>Гибко</h3>
-                    <p>Удобное расписание занятий.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Курсы -->
-    <section id="courses" class="py-5">
-        <div class="container">
-            <h2 class="text-center mb-5">Наши курсы</h2>
-            <div class="row">
-                {% for course in courses %}
-                    <div class="col-md-4 mb-4">
-                        <div class="card bg-dark text-white">
-                            {% if course.card_image %}
-                                <img src="{{ course.card_image.url }}" class="card-img" alt="{{ course.title }}">
-                            {% else %}
-                                <img src="{% static 'images/default-course.jpg' %}" class="card-img" alt="Курс">
-                            {% endif %}
-                            <div class="card-img-overlay">
-                                <h5 class="card-title">{{ course.title }}</h5>
-                                <p class="card-text">{{ course.description|truncatewords:15 }}</p>
-                                <a href="{% url 'courses:course_detail' pk=course.pk %}" class="btn btn-outline-light btn-sm">Подробнее</a>
-                            </div>
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </section>
+    </div>
+</section>
 {% endblock %}
