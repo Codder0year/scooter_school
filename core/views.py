@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .forms import ContactForm
 from courses.models import Course
+from .models import News
 
 
 def home(request):
@@ -17,6 +18,11 @@ def home(request):
 class AboutView(TemplateView):
     template_name = 'core/about.html'
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['news_list'] = News.objects.order_by('-date_posted')
+        return context
+
 
 def contact_view(request):
     if request.method == 'POST':
@@ -28,3 +34,8 @@ def contact_view(request):
         form = ContactForm()
 
     return render(request, 'contact.html', {'form': form})
+
+
+def about_view(request):
+    news_list = News.objects.order_by('-date_posted')  # последние новости сверху
+    return render(request, 'core/about.html', {'news_list': news_list})

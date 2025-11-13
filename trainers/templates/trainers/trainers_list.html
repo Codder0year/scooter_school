@@ -17,7 +17,7 @@
                         <p class="card-text">{{ trainer.bio }}</p>
                         <h6>Курсы:</h6>
                         <ul>
-                            {% for course in trainer.courses.all %}
+                            {% for course in trainer.course.all %}
                                 <li>{{ course.title }}</li>
                             {% endfor %}
                         </ul>

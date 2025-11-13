@@ -17,7 +17,6 @@
          {{ course.description }}
     </div>
 
-    {# Если указано "Для кого подходит", отображаем этот блок #}
     {% if course.suitable_for %}
         <div class="suitable-for" style="margin-top:20px; font-size:1.1em; line-height:1.5;">
             <strong>Для кого подходит:</strong> {{ course.suitable_for }}
@@ -37,14 +36,13 @@
 
     {# Предупреждение #}
     <div class="warning" style="margin-top:20px; text-align:center; color:#fff; background-color:#333; padding:10px; border-radius:5px;">
-         <strong>Внимание!</strong> Цены на сайте и барбершопе могут различаться, узнавайте точную цену у администратора!
+         <strong>Внимание!</strong> Цены на сайте и В школе могут различаться, узнавайте точную цену у администратора!
     </div>
 
     {# Блок для заявки и звонка #}
     <div class="call-to-action" style="margin-top:30px; text-align:center;">
          <p>Вы можете оставить заявку:</p>
-         <!-- Если у вас настроен URL для записей, замените 'enrollments:enroll' на актуальное имя -->
-         <a class="btn btn-dark text-white">Оставить заявку</a>
+         <a class="btn btn-dark text-white" href="{% url 'contact' %}">Оставить заявку</a>
          <p style="margin-top:10px;">Или позвонить нам для консультации: <strong>+7 923 243 43 43</strong></p>
     </div>
 </div>

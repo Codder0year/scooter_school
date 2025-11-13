@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'core/base.html' %}
 {% load static %}
 
 {% block extra_css %}
@@ -6,14 +6,81 @@
 <link rel="stylesheet" href="{% static 'booking/css/style_metro.css' %}">
 <style>
     .hidden { display: none; }
+
+    .selection-section {
+        background: rgba(85, 85, 85, 0.95);
+        padding: 25px;
+        margin: 20px 0;
+        border-radius: 10px;
+        color: #f0f0f0;
+        position: relative;
+        z-index: 2; /* чтобы клики работали */
+    }
+
+    .btn-choice {
+        margin: 10px 0;
+        padding: 15px;
+        font-size: 1.1em;
+        width: 100%;
+        transition: all 0.3s ease;
+        background-color: #666;
+        border: none;
+        color: white;
+    }
+    .btn-choice:hover {
+        background-color: #777;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+    }
+
+    .form-section {
+        margin: 25px 0;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 8px;
+    }
+
+    .form-control {
+        background: rgba(255, 255, 255, 0.85);
+        border: 1px solid #ccc;
+        color: #222;
+    }
+    .form-control:focus {
+        background: white;
+        color: #111;
+    }
+
+    h2, h5 {
+        color: #fff;
+        margin-bottom: 20px;
+    }
+    label {
+        color: #eee;
+        font-weight: bold;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    h5::first-letter,
+    h5 span.emoji {
+        filter: brightness(0.8);
+    }
+
+    /* кнопка отправки */
+    .btn-success {
+        background-color: #28a745;
+        border: none;
+    }
+    .btn-success:hover {
+        background-color: #2ecc71;
+    }
 </style>
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2>Заполните форму для записи</h2>
+<div class="container mt-4">
+    <h2 class="text-center">Запись на тренировку</h2>
 
-    <!-- Если есть сообщения об успешной отправке -->
     {% if messages %}
         <div class="alert alert-success">
             {% for message in messages %}
@@ -22,72 +89,113 @@
         </div>
     {% endif %}
 
-    <form method="post" novalidate>
+    <form method="post" novalidate id="booking-form">
         {% csrf_token %}
 
         <!-- Дата и время -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.date.id_for_label }}">Дата</label>
-                    {{ form.date }}
-                    {% for error in form.date.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+        <div class="selection-section">
+            <h5>📅 Дата и время тренировки</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.date.id_for_label }}">Дата *</label>
+                        {{ form.date }}
+                        {% for error in form.date.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label for="{{ form.time.id_for_label }}">Время</label>
-                    {{ form.time }}
-                    {% for error in form.time.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-
-        <!-- Кнопки выбора -->
-        <div class="row mt-3" id="choice-buttons">
-            <div class="col-md-6 mb-2">
-                <button type="button" class="btn btn-primary w-100" id="choose-trainer-btn">Выбрать тренера</button>
-            </div>
-            <div class="col-md-6">
-                <button type="button" class="btn btn-primary w-100" id="choose-course-btn">Выбрать курс</button>
-            </div>
-        </div>
-
-        <!-- Поля выбора тренера и курса -->
-        <div class="row mt-3 hidden" id="trainer-block">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label>Тренер</label>
-                    {{ form.trainer }}
-                    {% for error in form.trainer.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="{{ form.time.id_for_label }}">Время *</label>
+                        {{ form.time }}
+                        {% for error in form.time.errors %}
+                            <div class="text-danger">{{ error }}</div>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
 
-        <div class="row mt-3 hidden" id="course-block">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label>Курс</label>
-                    {{ form.course }}
-                    {% for error in form.course.errors %}
-                        <div class="text-danger">{{ error }}</div>
-                    {% endfor %}
+        <!-- Выбор способа записи -->
+        <div class="selection-section">
+            <h5>🎯 Выберите способ записи</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary btn-choice" id="choose-trainer-first">
+                        <strong>👨‍🏫 Сначала выбрать тренера</strong><br>
+                        <small>Затем выбрать его курс</small>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button type="button" class="btn btn-primary btn-choice" id="choose-course-first">
+                        <strong>📚 Сначала выбрать курс</strong><br>
+                        <small>Затем выбрать тренера</small>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Остальные поля -->
-        <div class="hidden" id="additional-fields">
-            <div class="row mt-3">
+        <!-- Блок выбора тренера (изначально скрыт) -->
+        <div class="selection-section hidden" id="trainer-selection">
+            <h5>👨‍🏫 Выберите тренера</h5>
+            <div class="form-group">
+                <select id="trainer-select" class="form-control">
+                    <option value="">-- Выберите тренера --</option>
+                    {% for trainer in trainers %}
+                        <option value="{{ trainer.id }}">{{ trainer.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Блок выбора курса тренера (скрыт) -->
+        <div class="selection-section hidden" id="trainer-courses">
+            <h5>📚 Выберите курс тренера</h5>
+            <div class="form-group">
+                <select id="trainer-course-select" class="form-control" name="course">
+                    <option value="">-- Сначала выберите тренера --</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Блок выбора курса (изначально скрыт) -->
+        <div class="selection-section hidden" id="course-selection">
+            <h5>📚 Выберите курс</h5>
+            <div class="form-group">
+                <select id="course-select" class="form-control">
+                    <option value="">-- Выберите курс --</option>
+                    {% for course in courses %}
+                        <option value="{{ course.id }}">{{ course.title }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+
+        <!-- Блок выбора тренера курса (скрыт) -->
+        <div class="selection-section hidden" id="course-trainers">
+            <h5>👨‍🏫 Выберите тренера для курса</h5>
+            <div class="form-group">
+                <select id="course-trainer-select" class="form-control" name="trainer">
+                    <option value="">-- Сначала выберите курс --</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Скрытые поля формы -->
+        <div class="hidden">
+            {{ form.trainer }}
+            {{ form.course }}
+        </div>
+
+        <!-- Дополнительные поля (появляются после выбора направления) -->
+        <div class="selection-section hidden" id="contact-fields">
+            <h5>👤 Ваши контактные данные</h5>
+
+            <div class="row">
                 <div class="col-md-12">
                     <div class="form-group">
-                        <label>Метро</label>
+                        <label>📍 Ближайшая станция метро *</label>
                         {{ form.metro }}
                         {% for error in form.metro.errors %}
                             <div class="text-danger">{{ error }}</div>
@@ -96,10 +204,10 @@
                 </div>
             </div>
 
-            <div class="row mt-3">
+            <div class="row">
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Имя</label>
+                        <label>👤 Ваше имя *</label>
                         {{ form.name }}
                         {% for error in form.name.errors %}
                             <div class="text-danger">{{ error }}</div>
@@ -108,7 +216,7 @@
                 </div>
                 <div class="col-md-6">
                     <div class="form-group">
-                        <label>Телефон</label>
+                        <label>📞 Телефон *</label>
                         {{ form.phone }}
                         {% for error in form.phone.errors %}
                             <div class="text-danger">{{ error }}</div>
@@ -119,96 +227,187 @@
 
             <div class="row mt-4">
                 <div class="col-md-12">
-                    <button type="submit" class="btn btn-success w-100">Отправить</button>
+                    <button type="submit" class="btn btn-success btn-lg w-100">
+                        ☑️ Записаться на тренировку
+                    </button>
                 </div>
             </div>
+        </div>
+
+        <!-- Кнопка отмены -->
+        <div class="text-center mt-3">
+            <button type="button" class="btn btn-outline-light" id="cancel-selection" style="display: none;">
+                🔄 Начать заново
+            </button>
         </div>
     </form>
 </div>
 {% endblock %}
 
-
 {% block extra_js %}
 <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
 <script>
 $(document).ready(function() {
-    let selectedPath = null;  // Переменная для отслеживания выбранного пути (тренер или курс)
+    let selectionPath = null;
 
-    // Ссылки на скрытые блоки для тренера, курса и дополнительных полей
-    const $additionalFields = $('#additional-fields');
-    const $trainerBlock = $('#trainer-block');
-    const $courseBlock = $('#course-block');
-
-    // Обработчик для кнопки "Выбрать тренера"
-    $('#choose-trainer-btn').click(function() {
-        selectedPath = 'trainer';  // Устанавливаем выбранный путь как тренер
-        $('#choice-buttons').hide();  // Скрываем кнопки выбора
-        $trainerBlock.removeClass('hidden').hide().fadeIn(500);  // Показываем блок тренера с анимацией
-        $courseBlock.addClass('hidden');  // Скрываем блок курса
-    });
-
-    // Обработчик для кнопки "Выбрать курс"
-    $('#choose-course-btn').click(function() {
-        selectedPath = 'course';  // Устанавливаем выбранный путь как курс
-        $('#choice-buttons').hide();  // Скрываем кнопки выбора
-        $courseBlock.removeClass('hidden').hide().fadeIn(500);  // Показываем блок курса с анимацией
-        $trainerBlock.addClass('hidden');  // Скрываем блок тренера
-    });
-
-    // Динамическая загрузка курсов для выбранного тренера
-    $('#id_trainer').change(function() {
-        if (selectedPath === 'trainer' && $(this).val()) {
-            // Загружаем курсы для выбранного тренера
-            $.get(`/booking/get-trainer-courses/${$(this).val()}/`, data => {
-                // Очищаем список курсов и добавляем новый
-                $('#id_course').empty().append('<option value="">---------</option>');
-                data.forEach(c => $('#id_course').append(`<option value="${c.id}">${c.name}</option>`));
-                // Показываем блок с курсами, если они есть
-                $courseBlock.removeClass('hidden').hide().fadeIn(500);
-            });
-        }
-    });
-
-    // Динамическая загрузка тренеров для выбранного курса
-    $('#id_course').change(function() {
-        if (selectedPath === 'course' && $(this).val()) {
-            // Загружаем тренеров для выбранного курса
-            $.get(`/booking/get-course-trainers/${$(this).val()}/`, data => {
-                // Очищаем список тренеров и добавляем новый
-                $('#id_trainer').empty().append('<option value="">---------</option>');
-                if (data.length > 0) {
-                    data.forEach(t => {
-                        $('#id_trainer').append(`<option value="${t.id}">${t.name}</option>`);
-                    });
-                    // Показываем блок с тренерами, если они есть
-                    $trainerBlock.removeClass('hidden').hide().fadeIn(500);
-                } else {
-                    // Если нет тренеров для курса, скрываем блок с тренерами
-                    $trainerBlock.addClass('hidden');
-                }
-            });
-        }
-    });
-
-
-    // Показываем дополнительные поля, когда оба выбора (тренер и курс) сделаны
-    $('body').on('change', '#id_course, #id_trainer', function() {
-        if (
-            (selectedPath === 'trainer' && $('#id_course').val()) ||  // Если выбран тренер и курс
-            (selectedPath === 'course' && $('#id_trainer').val())     // Если выбран курс и тренер
-        ) {
-            // Показываем дополнительные поля
-            $additionalFields.removeClass('hidden').hide().fadeIn(500);
-        }
-    });
-
-    // Автозаполнение для поля "Метро"
+    // Инициализация автозаполнения метро
     $('#id_metro').autocomplete({
-        source: "{% static 'metro_stations.json' %}",  // Источник данных для автозаполнения
-        minLength: 2,  // Минимальная длина ввода
-        delay: 300     // Задержка перед отправкой запроса
+        source: "{% static 'metro_stations.json' %}",
+        minLength: 2,
+        delay: 300
+    });
+
+    // Функция сброса выбора
+    function resetSelection() {
+        selectionPath = null;
+        $('#trainer-selection, #course-selection, #trainer-courses, #course-trainers, #contact-fields').addClass('hidden');
+        $('#choice-buttons').show();
+        $('#trainer-select, #course-select').val('');
+        $('#id_trainer, #id_course').val('');
+        $('#cancel-selection').hide();
+        $('#choose-trainer-first, #choose-course-first').removeClass('btn-success').addClass('btn-primary');
+    }
+
+    // Обработчик кнопки отмены
+    $('#cancel-selection').click(function() {
+        resetSelection();
+    });
+
+    // Обработчики выбора пути
+    $('#choose-trainer-first').click(function() {
+        selectionPath = 'trainer';
+        $('#trainer-selection').removeClass('hidden');
+        $('#course-selection').addClass('hidden');
+        $('#choose-trainer-first').removeClass('btn-primary').addClass('btn-success');
+        $('#choose-course-first').removeClass('btn-success').addClass('btn-primary');
+        $('#cancel-selection').show();
+    });
+
+    $('#choose-course-first').click(function() {
+        selectionPath = 'course';
+        $('#course-selection').removeClass('hidden');
+        $('#trainer-selection').addClass('hidden');
+        $('#choose-course-first').removeClass('btn-primary').addClass('btn-success');
+        $('#choose-trainer-first').removeClass('btn-success').addClass('btn-primary');
+        $('#cancel-selection').show();
+    });
+
+    // Загрузка курсов тренера
+    $('#trainer-select').change(function() {
+        const trainerId = $(this).val();
+        if (trainerId) {
+            $.get(`/booking/get-trainer-courses/${trainerId}/`, function(data) {
+                const $select = $('#trainer-course-select');
+                $select.empty().append('<option value="">-- Выберите курс --</option>');
+                if (data.length > 0) {
+                    data.forEach(function(course) {
+                        $select.append(`<option value="${course.id}">${course.name}</option>`);
+                    });
+                    $('#trainer-courses').removeClass('hidden');
+                    $('#id_trainer').val(trainerId);
+                    // Показываем контактные поля, так как тренер выбран
+                    $('#contact-fields').removeClass('hidden');
+                } else {
+                    $('#trainer-courses').addClass('hidden');
+                    alert('У этого тренера нет доступных курсов');
+                }
+            }).fail(function() {
+                alert('Ошибка загрузки курсов');
+            });
+        } else {
+            $('#trainer-courses').addClass('hidden');
+            $('#id_trainer').val('');
+            $('#contact-fields').addClass('hidden');
+        }
+    });
+
+    // Загрузка тренеров курса
+    $('#course-select').change(function() {
+        const courseId = $(this).val();
+        if (courseId) {
+            $.get(`/booking/get-course-trainers/${courseId}/`, function(data) {
+                const $select = $('#course-trainer-select');
+                $select.empty().append('<option value="">-- Выберите тренера --</option>');
+                if (data.length > 0) {
+                    data.forEach(function(trainer) {
+                        $select.append(`<option value="${trainer.id}">${trainer.name}</option>`);
+                    });
+                    $('#course-trainers').removeClass('hidden');
+                    $('#id_course').val(courseId);
+                    // Показываем контактные поля, так как курс выбран
+                    $('#contact-fields').removeClass('hidden');
+                } else {
+                    $('#course-trainers').addClass('hidden');
+                    alert('Для этого курса нет доступных тренеров');
+                }
+            }).fail(function() {
+                alert('Ошибка загрузки тренеров');
+            });
+        } else {
+            $('#course-trainers').addClass('hidden');
+            $('#id_course').val('');
+            $('#contact-fields').addClass('hidden');
+        }
+    });
+
+    // Обработчики выбора курса тренера и тренера курса
+    $('#trainer-course-select').change(function() {
+        $('#id_course').val($(this).val());
+    });
+
+    $('#course-trainer-select').change(function() {
+        $('#id_trainer').val($(this).val());
+    });
+
+    // Валидация формы при отправке
+    $('#booking-form').submit(function(e) {
+        const trainer = $('#id_trainer').val();
+        const course = $('#id_course').val();
+        const date = $('#id_date').val();
+        const time = $('#id_time').val();
+
+        if (!date || !time) {
+            e.preventDefault();
+            alert('Пожалуйста, выберите дату и время тренировки');
+            return false;
+        }
+
+        if (!trainer || !course) {
+            e.preventDefault();
+            alert('Пожалуйста, завершите выбор тренера и курса');
+            return false;
+        }
+
+        // Дополнительная проверка: тренер должен вести выбранный курс
+        if (trainer && course) {
+            // Эта проверка будет на сервере, но можно сделать и здесь
+            const selectedTrainerId = $('#trainer-select').val() || $('#course-trainer-select').val();
+            const selectedCourseId = $('#course-select').val() || $('#trainer-course-select').val();
+
+            if (selectionPath === 'trainer') {
+                // Проверяем, что выбранный курс принадлежит тренеру
+                const isValid = $('#trainer-course-select option[value="' + selectedCourseId + '"]').length > 0;
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Выбранный курс не доступен у этого тренера');
+                    return false;
+                }
+            } else if (selectionPath === 'course') {
+                // Проверяем, что выбранный тренер ведет этот курс
+                const isValid = $('#course-trainer-select option[value="' + selectedTrainerId + '"]').length > 0;
+                if (!isValid) {
+                    e.preventDefault();
+                    alert('Выбранный тренер не ведет этот курс');
+                    return false;
+                }
+            }
+        }
+    });
+
+    // Улучшение: автоматический фокус на первом поле при показе секций
+    $(document).on('show', '.selection-section', function() {
+        $(this).find('select:first, input:first').focus();
     });
 });
-
 </script>
 {% endblock %}

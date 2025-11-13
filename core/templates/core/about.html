@@ -47,291 +47,233 @@
       background: url('https://picsum.photos/1920/1080?random=3') no-repeat center center/cover;
     }
 
-    .hero::after {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.6);
-    }
+  .hero::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+  }
 
-    .hero-content {
-      position: relative;
-      z-index: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      padding: 0 20px;
-      animation: fadeInDown 1.5s ease-out;
-    }
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    animation: fadeInDown 1.5s ease-out;
+  }
 
-    .hero-content h2 {
-      font-size: 3em;
-      margin-bottom: 20px;
-      text-transform: uppercase;
-      letter-spacing: 3px;
-    }
+  .hero-content h2 {
+    font-size: 3em;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+  }
 
-    .hero-content p {
-      font-size: 1.2em;
-      max-width: 800px;
-      margin-bottom: 30px;
-      color: #ccc;
-    }
+  .hero-content p {
+    font-size: 1.2em;
+    max-width: 800px;
+    margin-bottom: 30px;
+    color: #ccc;
+  }
 
-    .hero-content button {
-      padding: 12px 30px;
-      font-size: 1em;
-      background: transparent;
-      border: 2px solid #666;
-      color: #fff;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: background 0.3s, color 0.3s;
-    }
+  .hero-content button {
+    padding: 12px 30px;
+    font-size: 1em;
+    background: transparent;
+    border: 2px solid #666;
+    color: #fff;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: background 0.3s, color 0.3s;
+  }
 
-    .hero-content button:hover {
-      background: #666;
-      color: #000;
-    }
+  .hero-content button:hover {
+    background: #666;
+    color: #000;
+  }
 
-    @keyframes fadeInDown {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    /* Основной контент */
-    .container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 120px 20px 60px;
-    }
-
-    .section {
-      margin-bottom: 80px;
+  @keyframes fadeInDown {
+    from {
       opacity: 0;
-      transform: translateY(20px);
-      transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+      transform: translateY(-20px);
     }
-
-    .section.visible {
+    to {
       opacity: 1;
       transform: translateY(0);
     }
+  }
 
-    .section h2 {
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 120px 20px 60px;
+  }
+
+  .section {
+    margin-bottom: 80px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+  }
+
+  .section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section h2 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+    position: relative;
+    display: inline-block;
+  }
+
+  .section h2::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 2px;
+    background: #666;
+  }
+
+  .about-content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .about-content img {
+    flex: 1 1 400px;
+    max-width: 500px;
+    width: 100%;
+    border: 5px solid #666;
+    border-radius: 5px;
+  }
+
+  .about-text {
+    flex: 1 1 400px;
+    font-size: 1.1em;
+    color: #ccc;
+  }
+
+  @media (max-width: 768px) {
+    .hero-content h2 {
       font-size: 2.5em;
-      margin-bottom: 20px;
-      text-align: center;
-      position: relative;
-      display: inline-block;
     }
 
-    .section h2::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 60%;
-      height: 2px;
-      background: #666;
+    .hero-content p {
+      font-size: 1em;
     }
 
     .about-content {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
     }
+  }
+</style>
+{% endblock %}
 
-    .about-content img {
-      flex: 1 1 400px;
-      max-width: 500px;
-      width: 100%;
-      border: 5px solid #666;
-      border-radius: 5px;
-    }
+{% block content %}
+<!-- Hero секция -->
+<section class="hero">
+  <div class="hero-content">
+    <h2>О нашей школе</h2>
+    <p>
+      Добро пожаловать в Школу Самокатов – место, где скорость встречается с мастерством!
+      Мы обучаем искусству катания, развиваем уверенность и дарим море ярких эмоций.
+    </p>
+    <button id="exploreBtn">Узнать больше</button>
+  </div>
+</section>
 
-    .about-text {
-      flex: 1 1 400px;
-      font-size: 1.1em;
-      color: #ccc;
-    }
-
-    /* Footer */
-    footer {
-      background: #111;
-      padding: 20px;
-      text-align: center;
-      border-top: 1px solid #666;
-    }
-
-    footer p {
-      font-size: 0.9em;
-      color: #666;
-    }
-
-    /* Адаптивность */
-    @media (max-width: 768px) {
-      .hero-content h2 {
-        font-size: 2.5em;
-      }
-
-      .hero-content p {
-        font-size: 1em;
-      }
-
-      .about-content {
-        flex-direction: column;
-      }
-    }
-  </style>
-</head>
-<body>
-  <header id="pageHeader">
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
-            <div class="container">
-                <a class="navbar-brand" href="{% url 'home' %}">Школа самокатов Мотивация</a>
-                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarContent"
-                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Главная</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'about' %}">О школе</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'courses:course_list' %}">Курсы</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'trainers:trainers_list' %}">Наши преподаватели</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'contact' %}">Контакты</a></li>
-                        <li class="nav-item">
-                            <a class="nav-link btn btn-outline-light ml-3" href="{% url 'booking:booking_new' %}">Записаться</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-    </header>
-  </header>
-
-  <!-- Hero секция -->
-  <section class="hero">
-    <div class="hero-content">
-      <h2>О нашей школе</h2>
-      <p>
-        Добро пожаловать в Школу Самокатов – место, где скорость встречается с мастерством!
-        Мы обучаем искусству катания, развиваем уверенность и дарим море ярких эмоций.
-      </p>
-      <button id="exploreBtn">Узнать больше</button>
+<!-- Основной контент -->
+<div class="container">
+  <!-- Миссия -->
+  <section class="section" id="mission">
+    <h2>Наша миссия</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>
+          Наша миссия – научить каждого чувствовать свободу и уверенность за рулем самоката.
+          Мы верим, что движение – это жизнь, а умение управлять самокатом открывает новые горизонты
+          и дарит незабываемые ощущения.
+        </p>
+        <p>
+          Мы заботимся о безопасности, профессионализме наших инструкторов и индивидуальном подходе к каждому ученику.
+        </p>
+      </div>
+      <img src="https://picsum.photos/600/400?random=4" alt="Наша миссия">
     </div>
   </section>
 
-  <!-- Основной контент -->
-  <div class="container">
-    <!-- Секция о миссии школы -->
-    <section class="section" id="mission">
-      <h2>Наша миссия</h2>
-      <div class="about-content">
-        <div class="about-text">
-          <p>
-            Наша миссия – научить каждого чувствовать свободу и уверенность за рулем самоката.
-            Мы верим, что движение – это жизнь, а умение управлять самокатом открывает новые горизонты
-            и дарит незабываемые ощущения.
-          </p>
-          <p>
-            Мы заботимся о безопасности, профессионализме наших инструкторов и индивидуальном подходе к каждому ученику.
-          </p>
-        </div>
-        <img src="https://picsum.photos/600/400?random=4" alt="Наша миссия">
+  <!-- Инструктора -->
+  <section class="section" id="instructors">
+    <h2>Наши инструктора</h2>
+    <div class="about-content">
+      <img src="https://picsum.photos/600/400?random=5" alt="Наши инструктора">
+      <div class="about-text">
+        <p>
+          Наши профессиональные инструкторы – это эксперты в своем деле, которые знают все секреты уверенного и безопасного катания.
+        </p>
+        <p>
+          Они помогут каждому раскрыть свой потенциал и научат грамотно управлять самокатом, независимо от уровня подготовки.
+        </p>
       </div>
-    </section>
+    </div>
+  </section>
 
-    <!-- Секция об инструкторах -->
-    <section class="section" id="instructors">
-      <h2>Наши инструктора</h2>
-      <div class="about-content">
-        <img src="https://picsum.photos/600/400?random=5" alt="Наши инструктора">
-        <div class="about-text">
-          <p>
-            Наши профессиональные инструкторы – это эксперты в своем деле, которые знают все секреты уверенного и безопасного катания.
-          </p>
-          <p>
-            Они помогут каждому раскрыть свой потенциал и научат грамотно управлять самокатом, независимо от уровня подготовки.
-          </p>
-        </div>
+  <!-- Отзывы -->
+  <section class="section" id="testimonials">
+    <h2>Отзывы учеников</h2>
+    <div class="about-content">
+      <div class="about-text">
+        <p>
+          «Я никогда не думал, что катание на самокате может приносить столько радости! Благодаря Школе Самокатов я обрел уверенность в себе и нашел новых друзей.»
+        </p>
+        <p>
+          «Отличная атмосфера, профессиональные преподаватели и море позитива. Рекомендую всем, кто хочет попробовать что-то новое!»
+        </p>
       </div>
-    </section>
+      <img src="https://picsum.photos/600/400?random=6" alt="Отзывы учеников">
+    </div>
+  </section>
+</div>
+{% endblock %}
 
-    <!-- Секция отзывов -->
-    <section class="section" id="testimonials">
-      <h2>Отзывы учеников</h2>
-      <div class="about-content">
-        <div class="about-text">
-          <p>
-            «Я никогда не думал, что катание на самокате может приносить столько радости! Благодаря Школе Самокатов я обрел уверенность в себе и нашел новых друзей.»
-          </p>
-          <p>
-            «Отличная атмосфера, профессиональные преподаватели и море позитива. Рекомендую всем, кто хочет попробовать что-то новое!»
-          </p>
-        </div>
-        <img src="https://picsum.photos/600/400?random=6" alt="Отзывы учеников">
-      </div>
-    </section>
-  </div>
+{% block extra_js %}
+<script>
+  document.getElementById('exploreBtn').addEventListener('click', function () {
+    document.getElementById('mission').scrollIntoView({ behavior: 'smooth' });
+  });
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 Школа Самокатов. Все права защищены.</p>
-  </footer>
+  const sections = document.querySelectorAll('.section');
+  const options = { threshold: 0.3 };
 
-  <script>
-    // Плавный скролл при нажатии на кнопку "Узнать больше"
-    document.getElementById('exploreBtn').addEventListener('click', function() {
-      document.getElementById('mission').scrollIntoView({ behavior: 'smooth' });
-    });
-
-    // Анимация появления секций при скролле
-    const sections = document.querySelectorAll('.section');
-    const options = {
-      threshold: 0.3
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, options);
-
-    sections.forEach(section => {
-      observer.observe(section);
-    });
-
-    // Изменение стиля хедера при скролле
-    window.addEventListener('scroll', () => {
-      const header = document.getElementById('pageHeader');
-      if(window.scrollY > 50) {
-        header.style.background = "rgba(17, 17, 17, 0.85)";
-      } else {
-        header.style.background = "rgba(17, 17, 17, 0.95)";
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
       }
     });
-  </script>
-</body>
-</html>
+  }, options);
+
+  sections.forEach(section => {
+    observer.observe(section);
+  });
+</script>
+{% endblock %}

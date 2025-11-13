@@ -1,17 +1,13 @@
+from django.core.exceptions import ValidationError
 from django.db import models
-
-CHOICES_DIRECTION = (
-    ('trainer', 'Выбрать тренера'),
-    ('course ', 'Выбрать услугу'),
-)
 
 
 class Booking(models.Model):
     date = models.DateField(verbose_name="Дата тренировки")
     time = models.TimeField(verbose_name="Время тренировки")
-    direction = models.CharField(max_length=20, choices=CHOICES_DIRECTION, verbose_name="Выбор направления")
 
-    # Если выбран конкретный тренер, ссылаемся на модель из приложения trainers
+    # Убрали direction - теперь определяется логикой выбора
+
     trainer = models.ForeignKey(
         'trainers.Trainer',
         on_delete=models.SET_NULL,
@@ -20,7 +16,6 @@ class Booking(models.Model):
         verbose_name="Тренер"
     )
 
-    # Если выбрана услуга, ссылаемся на модель из приложения courses
     course = models.ForeignKey(
         'courses.Course',
         on_delete=models.SET_NULL,
@@ -36,3 +31,13 @@ class Booking(models.Model):
 
     def __str__(self):
         return f"Запись {self.name} на {self.date} в {self.time}"
+
+    def clean(self):
+        """Проверка, что выбран либо тренер+курс, либо курс+тренер"""
+        if not self.trainer and not self.course:
+            raise ValidationError("Должен быть выбран либо тренер, либо курс")
+
+        if self.trainer and self.course:
+            # Проверяем, что тренер ведет этот курс
+            if not self.trainer.course.filter(id=self.course.id).exists():
+                raise ValidationError("Этот тренер не ведет выбранный курс")

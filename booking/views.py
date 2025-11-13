@@ -16,53 +16,90 @@ class BookingCreateView(View):
 
     def get(self, request, *args, **kwargs):
         form = BookingForm()
-        return render(request, self.template_name, {'form': form})
+        trainers = Trainer.objects.all()
+        courses = Course.objects.all()
+
+        return render(request, self.template_name, {
+            'form': form,
+            'trainers': trainers,
+            'courses': courses
+        })
 
     def post(self, request, *args, **kwargs):
         form = BookingForm(request.POST)
+        trainers = Trainer.objects.all()
+        courses = Course.objects.all()
+
         if form.is_valid():
             booking = form.save()
 
             # Отправка уведомления в Telegram
-            self.send_telegram_notification(booking)
+            success = self.send_telegram_notification(booking)
 
-            messages.success(request, "Спасибо за обращение, ожидайте звонка!")  # Это сообщение
-            return redirect('booking:booking_success')  # Можно редиректить на страницу успеха
-        return render(request, self.template_name, {'form': form})
+            if success:
+                messages.success(request, "Спасибо за запись! Мы свяжемся с вами для подтверждения.")
+            else:
+                messages.warning(request, "Запись сохранена, но не удалось отправить уведомление. Мы свяжемся с вами.")
+
+            return redirect('booking:booking_success')
+
+        return render(request, self.template_name, {
+            'form': form,
+            'trainers': trainers,
+            'courses': courses
+        })
 
     def send_telegram_notification(self, booking):
-        token = settings.TELEGRAM_BOT_TOKEN
-        chat_id = settings.TELEGRAM_CHAT_ID
-        message = (
-            f"Новая запись:\n"
-            f"Дата: {booking.date}\n"
-            f"Время: {booking.time}\n"
-            f"Направление: {booking.get_direction_display()}\n"
-            f"Тренер: {booking.trainer or 'N/A'}\n"
-            f"Услуга: {booking.course or 'N/A'}\n"
-            f"Метро: {booking.metro}\n"
-            f"Имя: {booking.name}\n"
-            f"Телефон: {booking.phone}"
-        )
-        url = f"https://api.telegram.org/bot{settings.TELEGRAM_BOT_TOKEN}/sendMessage"
-        payload = {
-            'chat_id': chat_id,
-            'text': message,
-        }
+        """Отправка уведомления в Telegram"""
         try:
-            response = requests.post(url, data=payload)
-            response.raise_for_status()  # Для поднятия исключения, если HTTP запрос неудачен
-            if response.status_code != 200:
-                print(f"Ошибка отправки сообщения, код ответа: {response.status_code}")
-        except Exception as e:
+            # Проверяем наличие настроек
+            if not hasattr(settings, 'TELEGRAM_BOT_TOKEN') or not hasattr(settings, 'TELEGRAM_CHAT_ID'):
+                print("TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не настроены")
+                return False
+
+            token = settings.TELEGRAM_BOT_TOKEN
+            chat_id = settings.TELEGRAM_CHAT_ID
+
+            # Формируем сообщение
+            message = (
+                f"🚴‍♂️ *НОВАЯ ЗАПИСЬ НА ТРЕНИРОВКУ*\n\n"
+                f"📅 *Дата:* {booking.date}\n"
+                f"⏰ *Время:* {booking.time}\n"
+                f"👨‍🏫 *Тренер:* {booking.trainer.name if booking.trainer else 'Не указан'}\n"
+                f"📚 *Курс:* {booking.course.title if booking.course else 'Не указан'}\n"
+                f"📍 *Метро:* {booking.metro}\n"
+                f"👤 *Имя:* {booking.name}\n"
+                f"📞 *Телефон:* {booking.phone}\n"
+                f"🕒 *Запись создана:* {booking.created_at.strftime('%d.%m.%Y %H:%M')}"
+            )
+
+            url = f"https://api.telegram.org/bot{token}/sendMessage"
+            payload = {
+                'chat_id': chat_id,
+                'text': message,
+                'parse_mode': 'Markdown'
+            }
+
+            response = requests.post(url, data=payload, timeout=10)
+            response.raise_for_status()
+
+            print(f"Telegram уведомление отправлено успешно! Статус: {response.status_code}")
+            return True
+
+        except requests.exceptions.RequestException as e:
             print(f"Ошибка отправки Telegram уведомления: {e}")
+            return False
+        except Exception as e:
+            print(f"Неожиданная ошибка при отправке в Telegram: {e}")
+            return False
 
 
+# Остальные функции остаются без изменений
 def get_trainer_courses(request, trainer_id):
     try:
         trainer = Trainer.objects.get(id=trainer_id)
-        courses = trainer.course.all()  # заменили services на courses
-        data = [{'id': c.id, 'name': c.title} for c in courses]
+        courses = trainer.course.all()
+        data = [{'id': course.id, 'name': course.title} for course in courses]
         return JsonResponse(data, safe=False)
     except Trainer.DoesNotExist:
         return JsonResponse([], safe=False)
@@ -71,9 +108,7 @@ def get_trainer_courses(request, trainer_id):
 def get_course_trainers(request, course_id):
     try:
         course = Course.objects.get(id=course_id)
-        print(f"Получен курс: {course.title}")  # Добавьте логирование
-        trainers = course.trainers.all()
-        print(f"Тренеры для курса: {[trainer.name for trainer in trainers]}")  # Логирование тренеров
+        trainers = course.trainers_list.all()
         data = [{'id': trainer.id, 'name': trainer.name} for trainer in trainers]
         return JsonResponse(data, safe=False)
     except Course.DoesNotExist:

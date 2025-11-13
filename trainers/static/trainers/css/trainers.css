@@ -1,9 +1,9 @@
 /* Стили карточек тренеров */
 .card {
-    background-color: #505050 !important; /* Темно-серый фон карточки */
+    background-color: #444444 !important; /* Темно-серый фон карточки */
     color: #fff !important;               /* Белый текст */
     border: none !important;
-    border-radius: 10px;
+    border-radius: 5px;
     overflow: hidden;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
@@ -29,13 +29,22 @@
     color: #ddd;  /* Чуть светлее для описания */
 }
 
-ul {
+/* Стили для списка курсов - ИСПРАВЛЕНО */
+.card ul {
     padding-left: 20px;
+    margin-bottom: 15px; /* Добавляем отступ снизу */
 }
 
-li {
+.card li {
     font-size: 0.9rem;
-    color: #ccc; /* Легкий оттенок для списка курсов */
+    color: #ffffff !important; /* Белый цвет для лучшей видимости */
+    margin-bottom: 5px; /* Отступ между пунктами */
+}
+
+.card h6 {
+    color: #fff !important; /* Белый цвет для заголовка "Курсы" */
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 /* Адаптивность */
@@ -44,4 +53,3 @@ li {
         max-width: 350px;
     }
 }
-
