@@ -2,166 +2,7 @@
 {% load static %}
 
 {% block extra_css %}
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
-
-body {
-    font-family: "Inter", sans-serif;
-    color: #eee;
-    background: #000;
-    margin: 0;
-}
-
-/* Бегущая строка */
-.scroll-text-container {
-    background-color: #000;
-    padding: 10px 0;
-    overflow: hidden;
-}
-.scroll-text {
-    display: inline-block;
-    white-space: nowrap;
-    animation: scroll-left 20s linear infinite;
-}
-.scroll-text h2 {
-    color: #fff;
-    font-size: 1.1rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    margin: 0;
-}
-@keyframes scroll-left {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-}
-
-/* HERO */
-.hero {
-    position: relative;
-    height: 100vh;
-    background: url("{% static 'images/hero-dark.jpg' %}") no-repeat center center;
-    background-size: cover;
-}
-.hero::after {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: 1;
-}
-.hero-background {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    opacity: 0.2;
-    z-index: 2;
-}
-.hero-background img {
-    height: 480px;
-}
-.hero .container {
-    position: relative;
-    z-index: 3;
-    text-align: center;
-    color: white;
-}
-.hero h1 {
-    font-family: "Roboto", sans-serif;
-    font-size: 3.5rem;
-    font-weight: 700;
-    color: white;
-}
-.hero p.lead {
-    font-size: 1.3rem;
-    color: #ccc;
-}
-.hero a.btn {
-    border: 2px solid white;
-    color: white;
-    padding: 10px 25px;
-    border-radius: 8px;
-    transition: 0.3s;
-}
-.hero a.btn:hover {
-    background: white;
-    color: black;
-}
-
-/* Telegram */
-.telegram-announcement {
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 10px;
-    padding: 40px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
-}
-.telegram-announcement .btn {
-    background-color: #000;
-    border: 1px solid #fff;
-    color: #fff;
-    transition: 0.3s;
-}
-.telegram-announcement .btn:hover {
-    background-color: #fff;
-    color: #000;
-}
-
-/* О нас */
-.energy-section {
-    background: rgba(0, 0, 0, 0.8);
-    color: white;
-    padding: 60px 0;
-}
-.energy-section h1 {
-    font-weight: bold;
-    font-size: 2.5rem;
-}
-.energy-section ul {
-    list-style: none;
-    padding-left: 0;
-}
-.energy-section li {
-    margin-bottom: 10px;
-}
-
-/* Преимущества и карточки */
-.bg-dark h3 {
-    color: #fff;
-}
-.bg-dark p {
-    color: #ccc;
-}
-.card {
-    border: none;
-    overflow: hidden;
-    transition: 0.3s;
-}
-.card:hover {
-    transform: translateY(-5px);
-}
-.card .card-img {
-    height: 240px;
-    object-fit: cover;
-}
-.card .card-img-overlay {
-    background: rgba(0,0,0,0.4);
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    padding: 15px;
-    transition: 0.3s;
-}
-.card .card-title {
-    font-weight: 600;
-    font-size: 1.2rem;
-}
-.card .card-text {
-    font-size: 0.9rem;
-}
-/* Молодёжный стиль: плавные тени и hover */
-.card:hover .card-img-overlay {
-    background: rgba(255,255,255,0.1);
-}
-</style>
+<link rel="stylesheet" href="{% static 'core/css/home.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -234,15 +75,15 @@ body {
 <section class="py-5 bg-dark">
     <div class="container">
         <div class="row text-center">
-            <div class="col-md-3">
+            <div class="col-md-3 mb-4 mb-md-0">
                 <h3>Профессионалы</h3>
                 <p>Опытные инструктора, готовые помочь.</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mb-4 mb-md-0">
                 <h3>Безопасность</h3>
                 <p>Современное оборудование и строгий контроль.</p>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-3 mb-4 mb-md-0">
                 <h3>Индивидуально</h3>
                 <p>Малые группы для каждого ученика.</p>
             </div>

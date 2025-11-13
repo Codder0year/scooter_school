@@ -13,30 +13,6 @@
     <link rel="stylesheet" href="{% static 'core/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'courses/css/card_style_courses.css' %}">
     {% block extra_css %}{% endblock %}
-    <style>
-      /* Уменьшаем хедер для более компактного вида */
-      header {
-          padding: 5px 10px;
-          background: rgba(0, 0, 0, 0.9);
-          box-shadow: none;
-      }
-      .navbar {
-          padding: 5px 0;
-      }
-      .navbar-brand {
-          font-size: 1.2rem;
-          padding-top: 5px;
-      }
-      .nav-link {
-          font-size: 0.9rem;
-      }
-      /* Обеспечим корректное отображение бургера на мобильных */
-      @media (max-width: 768px) {
-          .navbar-collapse {
-              background: rgba(0, 0, 0, 0.9);
-          }
-      }
-    </style>
 </head>
 <body>
     <!-- Шапка сайта -->

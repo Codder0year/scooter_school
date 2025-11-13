@@ -45,7 +45,7 @@ main {
 
 /* Блок преимуществ с коричневым фоном */
 .bg-dark {
-    background-color: #444444 !important; /* Темно-коричневый цвет */
+    background-color: #444444 !important;
 }
 
 .bg-dark h3,
@@ -126,5 +126,14 @@ input, textarea, select {
 @media (max-width: 767px) {
     .navbar-collapse {
         display: block;
+    }
+
+    /* Мобильная адаптация для основных элементов */
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .nav-link {
+        font-size: 0.8rem;
     }
 }

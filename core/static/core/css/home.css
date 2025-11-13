@@ -1,0 +1,211 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap');
+
+body {
+    font-family: "Inter", sans-serif;
+    color: #eee;
+    background: #000;
+    margin: 0;
+}
+
+/* Бегущая строка */
+.scroll-text-container {
+    background-color: #000;
+    padding: 10px 0;
+    overflow: hidden;
+}
+.scroll-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 20s linear infinite;
+}
+.scroll-text h2 {
+    color: #fff;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+}
+@keyframes scroll-left {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* HERO */
+.hero {
+    position: relative;
+    height: 100vh;
+    background: url("../images/hero-dark.jpg") no-repeat center center;
+    background-size: cover;
+}
+.hero::after {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 1;
+}
+.hero-background {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.2;
+    z-index: 2;
+}
+.hero-background img {
+    height: 480px;
+    max-width: 90%;
+}
+.hero .container {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    color: white;
+    padding: 0 15px;
+}
+.hero h1 {
+    font-family: "Roboto", sans-serif;
+    font-size: 3.5rem;
+    font-weight: 700;
+    color: white;
+}
+.hero p.lead {
+    font-size: 1.3rem;
+    color: #ccc;
+}
+.hero a.btn {
+    border: 2px solid white;
+    color: white;
+    padding: 10px 25px;
+    border-radius: 8px;
+    transition: 0.3s;
+}
+.hero a.btn:hover {
+    background: white;
+    color: black;
+}
+
+/* Telegram */
+.telegram-announcement {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 40px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+.telegram-announcement .btn {
+    background-color: #000;
+    border: 1px solid #fff;
+    color: #fff;
+    transition: 0.3s;
+}
+.telegram-announcement .btn:hover {
+    background-color: #fff;
+    color: #000;
+}
+
+/* О нас */
+.energy-section {
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 60px 0;
+}
+.energy-section h1 {
+    font-weight: bold;
+    font-size: 2.5rem;
+}
+.energy-section ul {
+    list-style: none;
+    padding-left: 0;
+}
+.energy-section li {
+    margin-bottom: 10px;
+}
+
+/* Преимущества и карточки */
+.card {
+    border: none;
+    overflow: hidden;
+    transition: 0.3s;
+}
+.card:hover {
+    transform: translateY(-5px);
+}
+.card .card-img {
+    height: 240px;
+    object-fit: cover;
+}
+.card .card-img-overlay {
+    background: rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 15px;
+    transition: 0.3s;
+}
+.card .card-title {
+    font-weight: 600;
+    font-size: 1.2rem;
+}
+.card .card-text {
+    font-size: 0.9rem;
+}
+.card:hover .card-img-overlay {
+    background: rgba(255,255,255,0.1);
+}
+
+/* Мобильная адаптация для home */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    .hero p.lead {
+        font-size: 1.1rem;
+    }
+    .hero-background img {
+        height: 300px;
+    }
+
+    .telegram-announcement {
+        padding: 20px;
+    }
+
+    .energy-section {
+        padding: 40px 0;
+    }
+    .energy-section h1 {
+        font-size: 2rem;
+        text-align: center;
+    }
+
+    .bg-dark .row.text-center .col-md-3 {
+        margin-bottom: 30px;
+    }
+
+    #courses .col-md-4 {
+        margin-bottom: 20px;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero h1 {
+        font-size: 1.8rem;
+    }
+    .hero p.lead {
+        font-size: 1rem;
+    }
+
+    .telegram-announcement .d-flex {
+        flex-direction: column;
+    }
+
+    .bg-dark .row.text-center .col-md-3 {
+        margin-bottom: 40px;
+    }
+
+    .energy-section .col-md-6 img {
+        max-width: 100%;
+        margin-bottom: 15px;
+    }
+    .energy-section .d-flex.justify-content-center.gap-2 {
+        gap: 10px !important;
+    }
+}
