@@ -18,11 +18,11 @@
                         <h6>Курсы:</h6>
                         <ul>
                             {% for course in trainer.course.all %}
-                                <li>{{ course.title }}</li>
+                                <li>{{ course.title }}</li>ё
                             {% endfor %}
                         </ul>
                     </div>
-                    <a class="nav-link btn btn-outline-light ml-3">Записаться</a>
+                    <a class="nav-link btn btn-outline-light ml-3" href="{% url 'booking:booking_new' %}">Записаться</a>
                 </div>
             </div>
         {% endfor %}
