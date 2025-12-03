@@ -1,11 +1,10 @@
-from django.urls import path
-from .views import trainers_list
-from django.conf import settings
-from django.conf.urls.static import static
-app_name = 'trainers'
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
+from .views import TrainerViewSet
+
+router = DefaultRouter()
+router.register(r'', TrainerViewSet, basename='trainer')
 
 urlpatterns = [
-    path('', trainers_list, name='trainers_list'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('api/trainers/', include(router.urls)),
+]

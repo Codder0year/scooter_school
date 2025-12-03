@@ -1,15 +1,11 @@
+from rest_framework import routers
 from django.urls import path, include
+from .views import NewsViewSet, contact_view
 
-from . import views
-from .views import home, AboutView
-from django.conf import settings
-from django.conf.urls.static import static
+router = routers.DefaultRouter()
+router.register(r'news', NewsViewSet, basename='news')
 
 urlpatterns = [
-    path('', home, name='home'),
-    path('about/', AboutView.as_view(), name='about'),
-    path('courses/', include('courses.urls')),
-    path('contact/', views.contact_view, name='contact'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', include(router.urls)),
+    path('contact/', contact_view, name='core-contact'),  # POST endpoint для формы контакта
+]

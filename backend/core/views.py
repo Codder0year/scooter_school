@@ -1,41 +1,68 @@
-from django.shortcuts import render
-from django.views.generic import TemplateView
-from django.core.mail import send_mail
+from rest_framework import viewsets, permissions, status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.response import Response
+from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
-from .forms import ContactForm
-from courses.models import Course
 from .models import News
+from .serializers import NewsSerializer
 
 
-def home(request):
-    # Получаем три конкретных курса
-    courses = Course.objects.filter(title__in=['Базовый курс', 'Продвинутый курс',
-                                               'Индивидуальное занятие с Егором: Мастерство'
-                                               ' и уверенность на самокате']).order_by('title')[:3]
-    return render(request, 'home.html', {'courses': courses})
+class IsAdminOrReadOnly(permissions.BasePermission):
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return bool(request.user and request.user.is_staff)
 
 
-class AboutView(TemplateView):
-    template_name = 'core/about.html'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['news_list'] = News.objects.order_by('-date_posted')
-        return context
+class NewsViewSet(viewsets.ModelViewSet):
+    queryset = News.objects.all().order_by('-date_posted')
+    serializer_class = NewsSerializer
+    permission_classes = [IsAdminOrReadOnly]
 
 
+@api_view(['POST'])
+@permission_classes([permissions.AllowAny])
 def contact_view(request):
-    if request.method == 'POST':
-        form = ContactForm(request.POST)
-        if form.is_valid():
-            # Обработка данных формы
-            return render(request, 'thank_you.html')  # Страница благодарности
-    else:
-        form = ContactForm()
+    """
+    Ожидает JSON:
+    {
+      "name": "...",
+      "message": "...",
+      "phone": "..."
+    }
+    Попытается отправить email на EMAIL_HOST_USER (если настроено),
+    иначе вернёт 200 и залогирует.
+    """
+    data = request.data
+    name = data.get('name')
+    message = data.get('message')
+    phone = data.get('phone')
 
-    return render(request, 'contact.html', {'form': form})
+    if not name or not message:
+        return Response({'detail': 'name и message обязательны'}, status=status.HTTP_400_BAD_REQUEST)
 
+    subject = f"Сообщение с сайта от {name}"
+    body_lines = [
+        f"Имя: {name}",
+        f"Телефон: {phone or 'Не указан'}",
+        "",
+        "Сообщение:",
+        message
+    ]
+    body = "\n".join(body_lines)
 
-def about_view(request):
-    news_list = News.objects.order_by('-date_posted')  # последние новости сверху
-    return render(request, 'core/about.html', {'news_list': news_list})
+    # Попытка отправить письмо, если настроена почта
+    email_sent = False
+    try:
+        email_from = getattr(settings, 'DEFAULT_FROM_EMAIL', None) or getattr(settings, 'EMAIL_HOST_USER', None)
+        email_to = [getattr(settings, 'CONTACT_EMAIL', None) or email_from]
+        if email_from and email_to and email_to[0]:
+            send_mail(subject, body, email_from, email_to, fail_silently=False)
+            email_sent = True
+    except BadHeaderError:
+        return Response({'detail': 'Invalid header found.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    except Exception as e:
+        # если почта не настроена или ошибка — просто логируем и возвращаем успех
+        print(f"contact_view: mail send error: {e}")
+
+    return Response({'ok': True, 'email_sent': email_sent}, status=status.HTTP_200_OK)

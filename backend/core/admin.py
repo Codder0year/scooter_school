@@ -1,6 +1,5 @@
 from django.contrib import admin
-
-from core.models import News
+from .models import News
 
 
 @admin.register(News)

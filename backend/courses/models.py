@@ -11,12 +11,10 @@ class Course(models.Model):
     time = models.CharField(max_length=100, verbose_name='Время')
     price = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Цена')
     suitable_for = models.CharField(max_length=200, blank=True, null=True, verbose_name='Для кого подходит')
-    trainers = models.ManyToManyField('trainers.Trainer', related_name='courses_list',
-                                      blank=True)  # Изменено на 'courses_list'
+    trainers = models.ManyToManyField('trainers.Trainer', related_name='courses_list', blank=True)
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
-        # Добавляем тренера в курс
         for trainer in self.trainers.all():
             if self not in trainer.course.all():
                 trainer.course.add(self)

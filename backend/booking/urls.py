@@ -1,12 +1,10 @@
-# booking/urls.py
-from django.urls import path
-from . import views
+from rest_framework import routers
+from .views import BookingViewSet
+from django.urls import path, include
 
-app_name = 'booking'
+router = routers.DefaultRouter()
+router.register(r'bookings', BookingViewSet, basename='booking')
 
 urlpatterns = [
-    path('', views.BookingCreateView.as_view(), name='booking_new'),
-    path('get-trainer-courses/<int:trainer_id>/', views.get_trainer_courses, name='get_trainer_courses'),
-    path('get-course-trainers/<int:course_id>/', views.get_course_trainers, name='get_course_trainers'),
-    path('success/', views.BookingSuccessView.as_view(), name='booking_success'),
+    path('', include(router.urls)),
 ]
