@@ -6,8 +6,6 @@ class Booking(models.Model):
     date = models.DateField(verbose_name="Дата тренировки")
     time = models.TimeField(verbose_name="Время тренировки")
 
-    # Убрали direction - теперь определяется логикой выбора
-
     trainer = models.ForeignKey(
         'trainers.Trainer',
         on_delete=models.SET_NULL,
@@ -15,15 +13,13 @@ class Booking(models.Model):
         null=True,
         verbose_name="Тренер"
     )
-
     course = models.ForeignKey(
         'courses.Course',
         on_delete=models.SET_NULL,
         blank=True,
         null=True,
-        verbose_name="Услуга"
+        verbose_name="Курс"
     )
-
     metro = models.CharField(max_length=100, verbose_name="Станция метро")
     name = models.CharField(max_length=100, verbose_name="Имя")
     phone = models.CharField(max_length=20, verbose_name="Телефон")
@@ -33,11 +29,10 @@ class Booking(models.Model):
         return f"Запись {self.name} на {self.date} в {self.time}"
 
     def clean(self):
-        """Проверка, что выбран либо тренер+курс, либо курс+тренер"""
+        # Проверяем, что выбран либо тренер, либо курс
         if not self.trainer and not self.course:
             raise ValidationError("Должен быть выбран либо тренер, либо курс")
 
-        if self.trainer and self.course:
-            # Проверяем, что тренер ведет этот курс
-            if not self.trainer.course.filter(id=self.course.id).exists():
-                raise ValidationError("Этот тренер не ведет выбранный курс")
+        # Проверяем, что тренер ведет курс
+        if self.trainer and self.course and not self.trainer.course.filter(id=self.course.id).exists():
+            raise ValidationError("Этот тренер не ведет выбранный курс")

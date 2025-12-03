@@ -1,66 +1,33 @@
-import requests
+from rest_framework import viewsets
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.conf import settings
-from django.http import JsonResponse
-from django.shortcuts import render, redirect
-from django.views import View
-from django.contrib import messages
-from django.views.generic import TemplateView
-
+import requests
+from .models import Booking
 from courses.models import Course
 from trainers.models import Trainer
-from .forms import BookingForm
+from .serializers import BookingSerializer, TrainerSerializer, CourseSerializer
 
 
-class BookingCreateView(View):
-    template_name = 'booking/booking_form.html'
+class BookingViewSet(viewsets.ModelViewSet):
+    queryset = Booking.objects.all().order_by('-created_at')
+    serializer_class = BookingSerializer
 
-    def get(self, request, *args, **kwargs):
-        form = BookingForm()
-        trainers = Trainer.objects.all()
-        courses = Course.objects.all()
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        booking = serializer.save()
 
-        return render(request, self.template_name, {
-            'form': form,
-            'trainers': trainers,
-            'courses': courses
-        })
-
-    def post(self, request, *args, **kwargs):
-        form = BookingForm(request.POST)
-        trainers = Trainer.objects.all()
-        courses = Course.objects.all()
-
-        if form.is_valid():
-            booking = form.save()
-
-            # Отправка уведомления в Telegram
-            success = self.send_telegram_notification(booking)
-
-            if success:
-                messages.success(request, "Спасибо за запись! Мы свяжемся с вами для подтверждения.")
-            else:
-                messages.warning(request, "Запись сохранена, но не удалось отправить уведомление. Мы свяжемся с вами.")
-
-            return redirect('booking:booking_success')
-
-        return render(request, self.template_name, {
-            'form': form,
-            'trainers': trainers,
-            'courses': courses
-        })
+        self.send_telegram_notification(booking)
+        return Response(serializer.data)
 
     def send_telegram_notification(self, booking):
-        """Отправка уведомления в Telegram"""
         try:
-            # Проверяем наличие настроек
-            if not hasattr(settings, 'TELEGRAM_BOT_TOKEN') or not hasattr(settings, 'TELEGRAM_CHAT_ID'):
-                print("TELEGRAM_BOT_TOKEN или TELEGRAM_CHAT_ID не настроены")
+            token = getattr(settings, 'TELEGRAM_BOT_TOKEN', None)
+            chat_id = getattr(settings, 'TELEGRAM_CHAT_ID', None)
+            if not token or not chat_id:
                 return False
 
-            token = settings.TELEGRAM_BOT_TOKEN
-            chat_id = settings.TELEGRAM_CHAT_ID
-
-            # Формируем сообщение
             message = (
                 f"🚴‍♂️ *НОВАЯ ЗАПИСЬ НА ТРЕНИРОВКУ*\n\n"
                 f"📅 *Дата:* {booking.date}\n"
@@ -74,46 +41,25 @@ class BookingCreateView(View):
             )
 
             url = f"https://api.telegram.org/bot{token}/sendMessage"
-            payload = {
-                'chat_id': chat_id,
-                'text': message,
-                'parse_mode': 'Markdown'
-            }
-
-            response = requests.post(url, data=payload, timeout=10)
-            response.raise_for_status()
-
-            print(f"Telegram уведомление отправлено успешно! Статус: {response.status_code}")
+            requests.post(url, data={'chat_id': chat_id, 'text': message, 'parse_mode': 'Markdown'}, timeout=10)
             return True
-
-        except requests.exceptions.RequestException as e:
-            print(f"Ошибка отправки Telegram уведомления: {e}")
-            return False
-        except Exception as e:
-            print(f"Неожиданная ошибка при отправке в Telegram: {e}")
+        except:
             return False
 
+    @action(detail=False, methods=['get'], url_path='trainer-courses/(?P<trainer_id>[^/.]+)')
+    def trainer_courses(self, request, trainer_id=None):
+        try:
+            trainer = Trainer.objects.get(id=trainer_id)
+            serializer = CourseSerializer(trainer.course.all(), many=True)
+            return Response(serializer.data)
+        except Trainer.DoesNotExist:
+            return Response([], status=404)
 
-# Остальные функции остаются без изменений
-def get_trainer_courses(request, trainer_id):
-    try:
-        trainer = Trainer.objects.get(id=trainer_id)
-        courses = trainer.course.all()
-        data = [{'id': course.id, 'name': course.title} for course in courses]
-        return JsonResponse(data, safe=False)
-    except Trainer.DoesNotExist:
-        return JsonResponse([], safe=False)
-
-
-def get_course_trainers(request, course_id):
-    try:
-        course = Course.objects.get(id=course_id)
-        trainers = course.trainers_list.all()
-        data = [{'id': trainer.id, 'name': trainer.name} for trainer in trainers]
-        return JsonResponse(data, safe=False)
-    except Course.DoesNotExist:
-        return JsonResponse([], safe=False)
-
-
-class BookingSuccessView(TemplateView):
-    template_name = 'booking/success.html'
+    @action(detail=False, methods=['get'], url_path='course-trainers/(?P<course_id>[^/.]+)')
+    def course_trainers(self, request, course_id=None):
+        try:
+            course = Course.objects.get(id=course_id)
+            serializer = TrainerSerializer(course.trainers_list.all(), many=True)
+            return Response(serializer.data)
+        except Course.DoesNotExist:
+            return Response([], status=404)

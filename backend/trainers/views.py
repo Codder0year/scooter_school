@@ -1,9 +1,8 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 from .models import Trainer
+from .serializers import TrainerSerializer
 
 
-def trainers_list(request):
-    trainers = Trainer.objects.all()
-    return render(request, 'trainers/trainers_list.html', {'trainers': trainers})
-
-
+class TrainerViewSet(viewsets.ModelViewSet):
+    queryset = Trainer.objects.all()
+    serializer_class = TrainerSerializer
